@@ -11,11 +11,11 @@ namespace OnlineHelpDesk.Areas.Admin.Models
     public class Facility
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int FacilityId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string FacilityId { get; set; }
         [Required]
         public string FacilityName { get; set; }
-        public int FacilityCategoryId { get; set; } //Foreign Key
+        public string FacilityCategoryId { get; set; } //Foreign Key
         public string Image { get; set; }
         public int Status { get; set; }
     }

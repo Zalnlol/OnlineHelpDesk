@@ -11,8 +11,8 @@ namespace OnlineHelpDesk.Areas.Admin.Models
     public class FacilityCategory
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int FacilityCategoryId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string FacilityCategoryId { get; set; }
         [Required(ErrorMessage = "Name is required!")]
         [StringLength(250, MinimumLength = 2, ErrorMessage = "Name from 2 to 250 characters")]
         public string CategoryName { get; set; }
