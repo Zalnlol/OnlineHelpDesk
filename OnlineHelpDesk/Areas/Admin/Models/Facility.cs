@@ -15,8 +15,11 @@ namespace OnlineHelpDesk.Areas.Admin.Models
         public string FacilityId { get; set; }
         [Required]
         public string FacilityName { get; set; }
-        public string FacilityCategoryId { get; set; } //Foreign Key
         public string Image { get; set; }
         public int Status { get; set; }
+
+
+        public string FacilityCategoryId { get; set; } //Foreign Key
+        public FacilityCategory FacilityCategory { get; set; } // Convention 4 A fully defined relationship at both ends will create a one-to-many relationship
     }
 }

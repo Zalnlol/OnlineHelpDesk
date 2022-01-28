@@ -16,5 +16,7 @@ namespace OnlineHelpDesk.Areas.Admin.Models
         [Required(ErrorMessage = "Name is required!")]
         [StringLength(250, MinimumLength = 2, ErrorMessage = "Name from 2 to 250 characters")]
         public string CategoryName { get; set; }
+
+        public ICollection<Facility> Facilities { get; set; } // Convention 4 A fully defined relationship at both ends will create a one-to-many relationship
     }
 }
