@@ -10,7 +10,7 @@ using OnlineHelpDesk.Areas.Admin.Models;
 namespace OnlineHelpDesk.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles="Admin")]
+    //[Authorize(Roles="Admin")]
     public class FacilityCategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,21 +31,80 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             return View(facilityList);
         }
 
-        public IActionResult CreateNewFacilityCategory()
+        public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateNewFacilityCategory(FacilityCategory newFacilityCategory) 
+        public IActionResult Create(FacilityCategory newFacilityCategory) 
         {
-            if (ModelState.IsValid) 
+            try
             {
-                _context.FacilityCategory.Add(newFacilityCategory);
-                _context.SaveChanges();
-                return RedirectToAction("FacilityCategoryList");
+                if (ModelState.IsValid)
+                {
+                    _context.FacilityCategory.Add(newFacilityCategory);
+                    _context.SaveChanges();
+                    return RedirectToAction("FacilityCategoryList");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Fail");
+                }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
             }
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Edit(string id) 
+        {
+            var model = _context.FacilityCategory.Find(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(FacilityCategory editFacilityCategory) 
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var ex = _context.FacilityCategory.Find(editFacilityCategory.FacilityCategoryId);
+                    ex.CategoryName = editFacilityCategory.CategoryName;
+                    _context.SaveChanges();
+                    return RedirectToAction("FacilityCategoryList");
+                }
+                else 
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+
+                ModelState.AddModelError(string.Empty, e.Message);
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Delete(string id)
+        {
+            var model = _context.FacilityCategory.Find(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(FacilityCategory removeFacilityCategory)
+        {
+            var model = _context.FacilityCategory.SingleOrDefault(fc => fc.FacilityCategoryId.Equals(removeFacilityCategory.FacilityCategoryId));
+            _context.FacilityCategory.Remove(model);
+            _context.SaveChanges();
+            return RedirectToAction("FacilityCategoryList");
         }
     }
 }
