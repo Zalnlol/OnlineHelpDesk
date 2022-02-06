@@ -27,8 +27,8 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
 
         public IActionResult FacilityCategoryList() 
         {
-            var facilityList = _context.FacilityCategory.ToList();
-            return View(facilityList);
+            var facilityCateList = _context.FacilityCategory.ToList();
+            return View(facilityCateList);
         }
 
         public IActionResult Create()

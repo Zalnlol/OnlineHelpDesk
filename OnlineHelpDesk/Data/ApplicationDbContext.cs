@@ -18,6 +18,5 @@ namespace OnlineHelpDesk.Data
         public virtual DbSet<Facility> Facility { get; set; }
         public virtual DbSet<FacilityCategory> FacilityCategory { get; set; }
         public virtual DbSet<RequestSample> RequestSample { get; set; }
-
     }
 }
