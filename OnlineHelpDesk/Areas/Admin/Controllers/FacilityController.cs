@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineHelpDesk.Areas.Admin.Models;
 using OnlineHelpDesk.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineHelpDesk.Areas.Admin.Controllers
 {

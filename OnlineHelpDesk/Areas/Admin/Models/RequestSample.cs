@@ -14,9 +14,9 @@ namespace OnlineHelpDesk.Areas.Admin.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RequestSampleId { get; set; }
         [Required]
-        public string FacilityId { get; set; }
+        public string FacilityCategoryId { get; set; } //Foreign Key
         [Required]
         public string Content { get; set; }
-        
+
     }
 }
