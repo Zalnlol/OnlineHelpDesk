@@ -16,8 +16,8 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
         public RequestSampleController(Data.ApplicationDbContext _context) 
         {
             this._context = _context;
-        
         }
+
         public IActionResult Index()
         {
             return View();
