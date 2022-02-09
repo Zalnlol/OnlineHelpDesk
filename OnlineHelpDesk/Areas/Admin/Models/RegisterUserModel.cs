@@ -31,7 +31,7 @@ namespace OnlineHelpDesk.Areas.Admin.Models
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
 
-
+        public string Id { get; set; }
         public bool Gender { get; set; }
         public string Class { get; set; }
 

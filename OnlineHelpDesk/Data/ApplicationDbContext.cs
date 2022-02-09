@@ -8,7 +8,16 @@ using OnlineHelpDesk.Areas.Admin.Models;
 
 namespace OnlineHelpDesk.Data
 {
-    public class ApplicationUser : IdentityUser { }
+    public class ApplicationUser : IdentityUser {
+
+
+        public string FullName { get; set; }
+        public string Class { get; set; }
+        public string Avatar { get; set; }
+        public bool Gender { get; set; }
+
+
+    }
 
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

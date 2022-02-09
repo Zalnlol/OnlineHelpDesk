@@ -30,7 +30,25 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            return View();
+
+          var user= db.Users.ToList();
+
+            List<RegisterUserModel> registerUserModels = new List<RegisterUserModel>();
+
+            foreach (var item in user)
+            {
+               RegisterUserModel registerUserModel = new RegisterUserModel();
+                registerUserModel.Id = item.Id;
+                registerUserModel.Email = item.Email;
+                registerUserModel.FullName = item.FullName;
+                registerUserModel.PhoneNumber = item.PhoneNumber;
+                registerUserModel.Gender = item.Gender;
+
+                registerUserModels.Add(registerUserModel);
+
+            }
+
+            return View(registerUserModels);
         }
 
         public IActionResult CreateAccount()
@@ -40,8 +58,26 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
         
 
         [HttpPost]
-        public IActionResult CreateAccount(RegisterUserModel registerUserModel)
+        public async Task<IActionResult> CreateAccount(RegisterUserModel registerUserModel)
         {
+            
+            ApplicationUser user = new ApplicationUser
+            {
+                UserName = registerUserModel.Email,
+                Email = registerUserModel.Email,
+                PhoneNumber = registerUserModel.PhoneNumber,
+                FullName = registerUserModel.FullName,
+                Class = registerUserModel.Class,
+                Avatar = "image/Userimage/usericon.png"
+            };
+
+            var result = await _userManager.CreateAsync(user, registerUserModel.Password);
+            if (result.Succeeded)
+            {
+
+                return RedirectToAction("Index");
+            }
+
             return View();
         }
 
