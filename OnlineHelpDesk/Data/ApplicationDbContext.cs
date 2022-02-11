@@ -16,16 +16,21 @@ namespace OnlineHelpDesk.Data
         public string Avatar { get; set; }
         public bool Gender { get; set; }
 
-
+        public string FacilityId { get; set; }
     }
 
+   
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+
+    public class ApplicationDbContext :IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options){}
 
         public virtual DbSet<Facility> Facility { get; set; }
         public virtual DbSet<FacilityCategory> FacilityCategory { get; set; }
         public virtual DbSet<RequestSample> RequestSample { get; set; }
+
+        
+
     }
 }

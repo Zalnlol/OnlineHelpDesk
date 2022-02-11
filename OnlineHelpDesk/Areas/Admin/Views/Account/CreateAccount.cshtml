@@ -79,8 +79,8 @@
                 </div>
                 <div class="col-sm-7">
                     <select class="form-control" name="Gender" asp-for="Gender">
-                        <option value="true">Male</option>
-                        <option value="false">Fmale</option>
+                        <option value="True">Male</option>
+                        <option value="False">Fmale</option>
 
                     </select>
                 </div>
@@ -103,7 +103,7 @@
                 <div class="col" style="text-align:center">
 
 
-                    <input type="submit" class="btn btn-outline-success" ref="submit" :disabled="Disable" value="Create New Account" />
+                    <input type="submit" class="btn btn-outline-success" ref="submit" :disabled="Disable" value="Next" />
                 </div>
             </div>
 
@@ -151,17 +151,27 @@
                         this.$refs.mail.innerText = ""
         
                         let result = false;
-                        axios.post("/admin/Account/checkemail", mail)
-                            .then(response => {
-                                console.log(response.data);
-                                if (response.data == false) {
-                                    this.$refs.mail.innerText = "This e-mail is already taken"
-                                } else {
-                                    this.$refs.mail.innerText = ""
-                                    this.Disable = false;
-                                }
+
+                        let url = "/admin/Account/checkemail?mail=" + mail;
+                        var request = new XMLHttpRequest();
+                        request.open('POST', url, false);  // `false` makes the request synchronous
+                        request.send(null);
+
+                        if (request.status === 200) {// That's HTTP for 'ok'
+                            console.log(request.responseText);
+
+                            if (request.responseText == "false") {
+                                this.$refs.mail.innerText = "This e-mail is already taken"
+            
+                            } else {
+                                this.$refs.mail.innerText = ""
+                                this.Disable = false;
                             }
-                            )
+
+                        }
+
+
+                      
                     }
 
 

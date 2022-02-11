@@ -2,68 +2,174 @@
 
 @{
     ViewData["Title"] = "Acount List";
+    var ds = ViewBag.data;
+
 }
+@using Newtonsoft.Json;
+@using System.Net.Http;
+@using System.Net.Http.Json;
+
+<!--CND VueJs-->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
 <h1 style="text-align:center">Account list</h1>
 
 <p>
     <a asp-action="CreateAccount">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
+<div id="myApp">
 
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
 
-         
 
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
-                    @if (item.Gender)
-                    {
-                        <span>Male</span>
-                    }
-                    else
-                    {
-                        <span>Fmale</span>
+                <th>
+                    <label>Email</label>
+                </th>
+                <th>
+                    <label>FullName</label>
+                </th>
+                <th>
+                    <label>PhoneNumber</label>
+                </th>
 
-                    }
-                </td>
-             
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"><Button class="btn btn-success">Edit</Button></a>
+                <th>
+                    <label>Gender</label>
+                </th>
 
-                    <a asp-action="Delete" asp-route-id="@item.Id"><Button class="btn btn-danger">Delete</Button></a>
+                <th>
+                    <label>Role</label>
+                </th>
 
-
-                </td>
+                <th style="text-align:center">
+                    <label>Action</label>
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+         
+                <tr v-for="(inf,index) in ds" :key="index">
+                    <td>
+                        {{inf.Email}}
+                    </td>
+                    <td>
+                        {{inf.FullName}}
+                    </td>
+                    <td>
+                        {{inf.PhoneNumber}}
+              
+                    </td>
+                    <td>
+                        <span v-if="inf.Gender">Male</span>
+                        <span v-else>Fmale</span>
 
+                    </td>
+
+                        <td>
+
+
+                            {{inf.Name}}
+                            
+                        </td>
+
+                        <td>
+
+                            <Button class="btn btn-success" v-on:click="resetpass('{{inf.Id}}')">Reset Password</Button>
+
+                            <a asp-action="Delete" asp-route-id="{{inf.Id}}"><Button class="btn btn-danger">Delete</Button></a>
+
+
+                        </td>
+
+                </tr>
+         
+        </tbody>
+    </table>
+
+
+
+    <pre id="ds">@JsonConvert.SerializeObject(ds)</pre>
+
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" hidden data-target="#exampleModal" id="click"></button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Changed password successfully</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="color:green; text-align:center">Your password is: 123456789aA &commat; </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+<script>
+
+   
+
+    var App = new Vue({
+        el: "#myApp",
+        created() {
+            this.load();
+        },
+
+        data() {
+            return {
+                ds:[]
+            }
+
+        },
+        methods: {
+
+            load: function () {
+                var ds1 = JSON.parse(document.getElementById("ds").innerText);
+
+                var timeconvert = document.getElementById("ds");
+                timeconvert.parentNode.removeChild(timeconvert);
+
+                console.log(ds1);
+
+                this.ds = ds1;
+            },
+
+
+            resetpass: function (id) {
+                let url = "/admin/Account/ResetPassword/" + id;
+                var request = new XMLHttpRequest();
+                request.open('POST', url, true);  // `false` makes the request synchronous
+                request.send(null);
+
+                if (request.status === 200) {// That's HTTP for 'ok'
+                    console.log(request.responseText);
+
+                    document.getElementById("click").click();
+
+                }
+
+
+
+            }
+
+        }
+
+    })
+
+
+</script>
