@@ -42,7 +42,7 @@
                     <label>Role</label>
                 </th>
 
-                <th style="text-align:center">
+                <th >
                     <label>Action</label>
                 </th>
             </tr>
@@ -75,9 +75,21 @@
 
                         <td>
 
-                            <Button class="btn btn-success" v-on:click="resetpass('{{inf.Id}}')">Reset Password</Button>
+                            <div class="dropdown">
+                                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Dropdown button
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                            <a asp-action="Delete" asp-route-id="{{inf.Id}}"><Button class="btn btn-danger">Delete</Button></a>
+                                    <a href="#" class="dropdown-item" v-on:click="resetpass(inf.Id)">Reset Password</a>
+                                    <a href="#" class="dropdown-item">Delete Account</a>
+
+                                </div>
+                            </div>
+
+                            
+
+                            
 
 
                         </td>
@@ -151,9 +163,11 @@
 
 
             resetpass: function (id) {
-                let url = "/admin/Account/ResetPassword/" + id;
+                let url = "/admin/Account/ResetPassword?id=" + id;
+
+                
                 var request = new XMLHttpRequest();
-                request.open('POST', url, true);  // `false` makes the request synchronous
+                request.open('POST', url, false);  // `false` makes the request synchronous
                 request.send(null);
 
                 if (request.status === 200) {// That's HTTP for 'ok'
