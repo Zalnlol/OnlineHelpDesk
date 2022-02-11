@@ -42,11 +42,16 @@
                     <label class="control-label" style="text-align:left">Choose Access:</label>
                 </div>
                 <div class="col-sm-7">
-                    <select name="Facility"  class="form-control"  id="Facility">
+                    <select name="Facility" class="form-control" id="Facility">
 
                         @foreach (var item in ViewBag.Facility)
                         {
-                            <option value="@item.FacilityId">@item.FacilityName</option>
+                            if (item.FacilityId != "Rec1")
+                            {
+                                <option value="@item.FacilityId">@item.FacilityName</option>
+                            }
+
+
                         }
 
 
@@ -73,8 +78,10 @@
     </div>
 
 
+
 <script>
     var tmp = document.getElementById("Facility").innerHTML;
+
     var App = new Vue({
         el: "#myApp",
         data() {
@@ -109,7 +116,7 @@
 
                 if (role == 3) {
                     this.ishow = true
-                    document.getElementById("Facility").innerHTML =` <option value="3">Receiver Room</option>`
+                    document.getElementById("Facility").innerHTML =` <option value="Rec1">Receiver Room</option>`
                 }
 
 

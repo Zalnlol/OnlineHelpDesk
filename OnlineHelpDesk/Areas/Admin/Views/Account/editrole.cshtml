@@ -1,0 +1,193 @@
+﻿@{
+    ViewData["Title"] = "Edit Role Account";
+}
+@using Newtonsoft.Json;
+@using System.Net.Http;
+@using System.Net.Http.Json;
+
+<!--CND VueJs-->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
+
+<h3 style="text-align:center; margin-bottom:2%">Edit Role</h3>
+<div class="row" id="myApp">
+    <div class="col-sm-3"></div>
+
+
+
+    <div class="col-sm-6">
+        <form asp-action="editrole" asp-controller="Account" method="post">
+
+            <input type="text" name="Id" hidden value="@ViewBag.Id" />
+
+
+            <div class="row" style="margin-bottom:5%">
+                <div class="col-sm-5">
+                    <label class="control-label" style="text-align:left">Choose Access:</label>
+                </div>
+                <div class="col-sm-7">
+                    <select name="roles" ref="roles" v-on:change="show()" id="Roles" class="form-control">
+                        <option selected value="@ViewBag.RoleUser.Id">@ViewBag.RoleUser.Name</option>
+
+
+                        @foreach (var item in ViewBag.Roles)
+                        {
+
+
+                            @if (ViewBag.RoleUser.Id != item.Id)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+
+
+                        }
+
+
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:5%" id="Facilitydiv" v-show="ishow">
+                <div class="col-sm-5">
+                    <label class="control-label" style="text-align:left">Choose Access:</label>
+                </div>
+                <div class="col-sm-7">
+
+
+                    <select name="Facility" class="form-control" id="Facility">
+                        @if (ViewBag.FacilityUser != null)
+                        {
+
+                            <option selected value="@ViewBag.FacilityUser.FacilityId">@ViewBag.FacilityUser.FacilityName</option>
+
+                            @if (ViewBag.RoleUser.Id != "3")
+                            {
+                                @foreach (var item in ViewBag.Facility)
+                                {
+
+                                    @if (ViewBag.FacilityUser.FacilityId != item.FacilityId & item.FacilityId != "Rec1")
+                                    {
+                                        <option value="@item.FacilityId">@item.FacilityName</option>
+                                    }
+
+
+                                }
+                            }
+
+
+
+
+
+                        }
+                        else
+                        {
+
+                            @foreach (var item in ViewBag.Facility)
+                            {
+
+
+
+                                <option value="@item.FacilityId">@item.FacilityName</option>
+
+
+
+                            }
+
+                        }
+
+                    </select>
+
+
+
+
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-bottom:5%">
+
+                <div class="col" style="text-align:center">
+
+
+                    <input type="submit" class="btn btn-outline-success" value="Edit Role" />
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+    <div class="col-sm-3"></div>
+</div>
+
+
+<select id="ds1">
+    @foreach (var item in ViewBag.Facility)
+    {
+        @if (item.FacilityId != "Rec1")
+        {
+            <option value="@item.FacilityId">@item.FacilityName</option>
+        }
+    }
+</select>
+
+<script>
+    var tmp = document.getElementById("ds1").innerHTML;
+    var timeconvert = document.getElementById("ds1");
+    timeconvert.parentNode.removeChild(timeconvert);
+    var App = new Vue({
+        el: "#myApp",
+        created() {
+            this.load();
+        },
+        data() {
+            return {
+
+                ishow: false
+
+            }
+
+        },
+        methods: {
+            load: function () {
+
+                setTimeout(this.show,1)
+
+
+            },
+            show: function () {
+
+                let role = this.$refs.roles.value
+
+
+
+                if (role == 1 || role == 2) {
+
+                    this.ishow = false
+                } else if (role == 2) {
+
+
+                    this.ishow = true
+
+                } else if (role == 4) {
+                    document.getElementById("Facility").innerHTML = tmp;
+
+                    this.ishow = true
+                }
+
+                if (role == 3) {
+                    this.ishow = true
+                    document.getElementById("Facility").innerHTML = ` <option value="3">Receiver Room</option>`
+                }
+
+
+            }
+
+        }
+
+    })
+</script>
+
+
+

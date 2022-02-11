@@ -84,6 +84,9 @@
                                     <a href="#" class="dropdown-item" v-on:click="resetpass(inf.Id)">Reset Password</a>
                                     <a href="#" class="dropdown-item">Delete Account</a>
 
+                                    <a class="dropdown-item" v-on:click="editrole(inf.Id)" href="#">Edit Role</a>
+
+
                                 </div>
                             </div>
 
@@ -179,6 +182,11 @@
 
 
 
+            },
+
+
+            editrole: function (id) {
+                location.href = "/admin/account/editrole?id=" + id;
             }
 
         }

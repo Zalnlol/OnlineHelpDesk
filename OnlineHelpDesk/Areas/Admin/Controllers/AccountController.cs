@@ -94,11 +94,16 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
 
             db.UserRoles.Add(roleModel);
             db.SaveChanges();
+            if (roles !="1" || roles !="2")
+            {
+                var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
+                user.FacilityId = Facility;
 
-            var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
-            user.FacilityId = Facility;
+                db.SaveChanges();
 
-            db.SaveChanges();
+            }
+
+
 
 
             return RedirectToAction("Index");
@@ -168,5 +173,93 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
         }
 
 
+        public IActionResult editrole(string id)
+        {
+
+           
+            var Facility = db.Facility.ToList();
+
+            Facility FacilityUser = new Facility();
+
+            if (db.Users.SingleOrDefault(t => t.Id.Equals(id)).FacilityId != null)
+            {
+                 FacilityUser = (from user in db.Users
+                                    where user.Id.Equals(id)
+                                    join facilitys in db.Facility
+                                    on user.FacilityId equals facilitys.FacilityId
+                                    select facilitys).SingleOrDefault();
+            }
+            else
+            {
+                FacilityUser = null;
+            }
+
+
+            var RoleUser = (from userrole in db.UserRoles
+                            where userrole.UserId.Equals(id)
+                            join roles in db.Roles
+                            on
+                            userrole.RoleId equals roles.Id
+                            select roles).SingleOrDefault();
+            var Role = db.Roles.ToList();
+
+            ViewBag.FacilityUser = FacilityUser;
+            ViewBag.Facility = Facility;
+            ViewBag.RoleUser = RoleUser;
+            ViewBag.Roles = Role;
+
+            ViewBag.Id = id;
+
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult editrole(string Id, string roles, string Facility)
+        {
+            var userrole = db.UserRoles.SingleOrDefault(t => t.UserId.Equals(Id));
+
+            
+
+            var newuserrole = userrole;
+
+
+            db.UserRoles.Remove(userrole);
+            db.SaveChanges();
+
+            newuserrole.RoleId = roles;
+            db.UserRoles.Add(newuserrole);
+
+
+           
+
+            if (roles == "1" || roles == "2")
+            {
+                return BadRequest(roles);
+                var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
+                user.FacilityId = null;
+              
+
+            }
+            else
+            {
+
+                var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
+                user.FacilityId = Facility;
+
+            }
+
+
+
+
+            db.SaveChanges();
+
+
+            return RedirectToAction("Index");
+
+
+         
+        }
     }
 }
