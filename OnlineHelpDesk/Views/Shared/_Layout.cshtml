@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - OnlineHelpDesk</title>
+    <title>@ViewData["Title"] </title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 
@@ -16,8 +16,8 @@
     </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/home">Online Help  Desk</a>
+        <nav class="navbar navbar-expand-lg " style="background-color: #0c0f38; margin-bottom:2%" >
+            <a class="navbar-brand" style="color: white " href="/home">Online Help  Desk</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -32,16 +32,16 @@
                             @if (@UserManager.GetUserAsync(User).Result?.FullName == null)
                             {
                                 <li class="nav-item ">
-                                    <a class="nav-link" style="color:black" href="/home">Home</a>
+                                    <a class="nav-link" style="color: white" href="/home">Home</a>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link" style="color:black" href="/home/login">Login</a>
+                                    <a class="nav-link" style="color: white" href="/home/login">Login</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" style="color:black" href="/home#Services">Services</a>
+                                    <a class="nav-link" style="color: white" href="/home#Services">Services</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" style="color:black" href="/home#contact">Contact</a>
+                                    <a class="nav-link" style="color: white" href="/home#contact">Contact</a>
                                 </li>
                             }
                             else
@@ -49,14 +49,14 @@
 
 
                                 <li class="nav-item ">
-                                    <a class="nav-link"style="color:black" href="/home/Roomlist">Room List</a>
+                                    <a class="nav-link"style="color: white" href="/home/Roomlist">Room List</a>
                                 </li>
 
                                 @if (Context.Session.GetString("Role") == "4")
 
                                 {
                                     <li class="nav-item ">
-                                        <a class="nav-link" style="color:black" href="">Room Manager</a>
+                                        <a class="nav-link" style="color: white" href="">Room Manager</a>
                                     </li>
                                 }
 
@@ -64,24 +64,24 @@
 
                                 {
                                     <li class="nav-item ">
-                                        <a class="nav-link" style="color:black" href="">Report Manager</a>
+                                        <a class="nav-link" style="color: white" href="">Report Manager</a>
                                     </li>
                                 }
 
 
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" style="color:black" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a class="nav-link dropdown-toggle" style="color: white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Hello @UserManager.GetUserAsync(User).Result?.FullName !
                                     </a>
 
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" style="color:black" href="#">Manager Profile</a>
-                                        <a class="dropdown-item" style="color:black" href="#">History Report</a>
+                                        <a class="dropdown-item" style="color: white" href="#">Manager Profile</a>
+                                        <a class="dropdown-item" style="color: white" href="#">History Report</a>
 
                                     </div>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link"  style="color:black" href="/home/logout">Logout</a>
+                                    <a class="nav-link"  style="color:white" href="/home/logout">Logout</a>
                                 </li>
                             }
 
