@@ -236,7 +236,7 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
 
             if (roles == "1" || roles == "2")
             {
-                return BadRequest(roles);
+          
                 var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
                 user.FacilityId = null;
               
