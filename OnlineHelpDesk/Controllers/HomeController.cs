@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using OnlineHelpDesk.Data;
 using OnlineHelpDesk.Models;
+using Microsoft.AspNetCore.Http;
 using OnlineHelpDesk.Areas.Admin.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -41,13 +42,9 @@ namespace OnlineHelpDesk.Controllers
 
 
         [HttpPost]
-        public  string Login(
-            string mail, string password)
+        public async Task<string> Login( string mail, string password)
         {
-            if (string.IsNullOrEmpty(password))
-            {
-                throw new ArgumentException($"'{nameof(password)}' cannot be null or empty.", nameof(password));
-            }
+       
 
 
             //Services.Mail mail = new Services.Mail();
@@ -55,17 +52,21 @@ namespace OnlineHelpDesk.Controllers
             //return password;
 
 
-            var result =  _signInManager.PasswordSignInAsync(mail, password, true, false);
+            var result = await _signInManager.PasswordSignInAsync(mail, password, true, false);
 
-            if (result.Result.Succeeded)
+
+
+            if (result.Succeeded==true)
             {
 
-                string id = _userManager.GetUserAsync(User).Result?.Id;
+                string id = db.Users.SingleOrDefault(t => t.Email.Equals(mail)).Id;
                 //return id;
+                var role =  db.UserRoles.SingleOrDefault(t => t.UserId.Equals(id)).RoleId;
+                HttpContext.Session.SetString("Role", role);
 
-                if (db.UserRoles.SingleOrDefault(t=>t.UserId.Equals(id)).RoleId == "1")
+                if (role == "1")
                 {
-                    return  "admin";
+                   return  "admin";
                 }
 
                 return "true";
@@ -80,7 +81,37 @@ namespace OnlineHelpDesk.Controllers
 
         }
 
+            public IActionResult Roomlist()
+        {
+
+            var ds = db.Facility.ToList();
+            var category = db.FacilityCategory.ToList();
+
+            ViewBag.ds = ds;
+            ViewBag.category = category;
+
+            return View();
 
 
+        }
+
+
+        public async Task<IActionResult> Logout(string returnUrl = null)
+        {
+
+            await _signInManager.SignOutAsync();
+
+            if (returnUrl != null)
+            {
+
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                HttpContext.Session.Remove("Role");
+           
+                return RedirectToAction("Index", "Home");
+            }
+        }
     }
 }

@@ -2,7 +2,11 @@
     ViewData["Title"] = "Home Page";
     Layout = "_LayoutHomepage";
 }
-
+@using Microsoft.AspNetCore.Identity
+@using OnlineHelpDesk.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Http;
 
 
 <!DOCTYPE html>
@@ -64,15 +68,59 @@
                                     <li class="nav-item active">
                                         <a class="nav-link" href="#">Home</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#service"> Service</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#contact">Contact</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/home/login">Login</a>
-                                    </li>
+
+
+
+                                    @if (@UserManager.GetUserAsync(User).Result?.FullName == null)
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#Services"> Services</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#contact">Contact</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/home/login">Login</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Hello @UserManager.GetUserAsync(User).Result?.FullName !</a>
+                                        </li>
+
+                                        @if (Context.Session.GetString("Role") == "4")
+
+                                        {
+                                            <li class="nav-item ">
+                                                <a class="nav-link" href="">Room Manager</a>
+                                            </li>
+                                        }
+
+                                        @if (Context.Session.GetString("Role") == "3")
+
+                                        {
+                                            <li class="nav-item ">
+                                                <a class="nav-link" href="">Report Manager</a>
+                                            </li>
+                                        }
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/home/Roomlist">Room List</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/home/logout">Logout</a>
+                                        </li>
+
+
+                                    }
+
+
+
+
+
+
                                 </ul>
                             </div>
                         </nav>
@@ -90,10 +138,12 @@
                 <div class="col-md-5">
                     <div class="text-bg">
                         <h1>This is a student support website</h1>
-            
-                        <p>This is a place to answer students' questions about all learning problems, as well as a place to report problems 
-                        about lecturers, furniture, ... Is a place for students to borrow a certain
-                        room in school</p>
+
+                        <p>
+                            This is a place to answer students' questions about all learning problems, as well as a place to report problems
+                            about lecturers, furniture, ... Is a place for students to borrow a certain
+                            room in school
+                        </p>
                         <a href="#">Get Started</a>
                     </div>
                 </div>
@@ -106,9 +156,8 @@
         </div>
     </section>
     <!-- end banner -->
-    
     <!-- Services  -->
-    <div id="service" class="Services">
+    <div id="Services" class="Services">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -143,7 +192,7 @@
                         <p>Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci.</p>
                     </div>
                 </div>
-              
+
                 <a class="read_more" href="#">Read More</a>
             </div>
         </div>
@@ -237,13 +286,15 @@
                     </div>
                 </div>
             </div>
-            <div class="copyright">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <p>© 2019 All Rights Reserved. <a href="https://html.design/">Free html Templates</a></p>
-                        </div>
-                    </div>
+
+            <div class="border-top footer text-muted">
+                <div class="text-center p-3" style="background-color: #0c0f38;">
+
+
+                    <label style="color:white">
+                        © 2022 Copyright:
+                        <a class="text-white" style="color:white" href="https://mdbootstrap.com/">Online Help Desk</a>
+                    </label>
                 </div>
             </div>
         </div>
