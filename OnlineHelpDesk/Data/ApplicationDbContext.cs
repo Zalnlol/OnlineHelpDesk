@@ -30,7 +30,6 @@ namespace OnlineHelpDesk.Data
         public virtual DbSet<FacilityCategory> FacilityCategory { get; set; }
         public virtual DbSet<RequestSample> RequestSample { get; set; }
 
-        
-
+        public virtual DbSet<Models.Request> Request { get; set; }
     }
 }

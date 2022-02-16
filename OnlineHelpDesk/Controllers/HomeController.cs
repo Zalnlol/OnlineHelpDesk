@@ -63,6 +63,7 @@ namespace OnlineHelpDesk.Controllers
                 //return id;
                 var role =  db.UserRoles.SingleOrDefault(t => t.UserId.Equals(id)).RoleId;
                 HttpContext.Session.SetString("Role", role);
+                HttpContext.Session.SetString("userId", id);
 
                 if (role == "1")
                 {
@@ -120,7 +121,8 @@ namespace OnlineHelpDesk.Controllers
             else
             {
                 HttpContext.Session.Remove("Role");
-           
+                HttpContext.Session.Remove("userId");
+
                 return RedirectToAction("Index", "Home");
             }
         }
