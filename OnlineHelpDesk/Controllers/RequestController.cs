@@ -47,7 +47,7 @@ namespace OnlineHelpDesk.Controllers
                 {
                     req.Status = "Waiting for approval";
                     req.RequestorId = HttpContext.Session.GetString("userId");
-                    req.FacilityId = request["FacilityId"];
+                    req.FacilityId = int.Parse(request["FacilityId"]);
                     req.RequestTime = DateTime.Now;
                     req.StartDate = DateTime.Parse(request["StartDate"]);
                     req.EndDate = DateTime.Parse(request["EndDate"]);
@@ -82,7 +82,7 @@ namespace OnlineHelpDesk.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        req.FacilityId = request["FacilityId"];
+                        req.FacilityId = int.Parse(request["FacilityId"]);
                         req.StartDate = DateTime.Parse(request["StartDate"]);
                         req.EndDate = DateTime.Parse(request["EndDate"]);
                         req.Remark = request["Remark"];

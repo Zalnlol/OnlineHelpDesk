@@ -85,7 +85,7 @@ namespace OnlineHelpDesk.Controllers
             public IActionResult Roomlist()
         {
 
-            var ds = db.Facility.ToList();
+            var ds = db.Facility.Where(t => t.Status != 0).ToList();
             var category = db.FacilityCategory.ToList();
 
             ViewBag.ds = ds;

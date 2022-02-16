@@ -18,7 +18,7 @@ namespace OnlineHelpDesk.Models
         public String RequestorId { get; set; }
 
         [Required(ErrorMessage = "Facility is required!")]
-        public String FacilityId { get; set; }
+        public int FacilityId { get; set; }
 
         [BindProperty, DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime RequestTime { get; set; }
