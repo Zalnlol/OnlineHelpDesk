@@ -97,7 +97,7 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             if (roles !="1" || roles !="2")
             {
                 var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
-                user.FacilityId = Facility;
+                user.FacilityId = int.Parse(Facility);
 
                 db.SaveChanges();
 
@@ -181,13 +181,13 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
 
             Facility FacilityUser = new Facility();
 
-            if (db.Users.SingleOrDefault(t => t.Id.Equals(id)).FacilityId != null)
+            if (db.Users.SingleOrDefault(t => t.Id.Equals(id)).FacilityId != 0)
             {
                  FacilityUser = (from user in db.Users
                                     where user.Id.Equals(id)
                                     join facilitys in db.Facility
-                                    on user.FacilityId equals facilitys.FacilityId
-                                    select facilitys).SingleOrDefault();
+                                    on user.FacilityId.ToString() equals facilitys.FacilityId.ToString()
+                                 select facilitys).SingleOrDefault();
             }
             else
             {
@@ -238,7 +238,7 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             {
           
                 var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
-                user.FacilityId = null;
+                user.FacilityId = 0;
               
 
             }
@@ -246,7 +246,7 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             {
 
                 var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
-                user.FacilityId = Facility;
+                user.FacilityId = int.Parse(Facility);
 
             }
 

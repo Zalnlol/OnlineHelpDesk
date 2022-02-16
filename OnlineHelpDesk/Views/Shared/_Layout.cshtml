@@ -6,14 +6,15 @@
     <title>@ViewData["Title"] </title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
 
     @using Microsoft.AspNetCore.Identity
     @using OnlineHelpDesk.Data
     @inject SignInManager<ApplicationUser> SignInManager
     @inject UserManager<ApplicationUser> UserManager
-        @using Microsoft.AspNetCore.Http;
-    </head>
+    @using Microsoft.AspNetCore.Http;
+</head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg " style="background-color: #0c0f38; margin-bottom:2%" >

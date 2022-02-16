@@ -16,7 +16,7 @@ namespace OnlineHelpDesk.Data
         public string Avatar { get; set; }
         public bool Gender { get; set; }
 
-        public string FacilityId { get; set; }
+        public int FacilityId { get; set; }
     }
 
    

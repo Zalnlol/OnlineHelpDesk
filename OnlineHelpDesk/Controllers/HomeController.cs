@@ -95,6 +95,17 @@ namespace OnlineHelpDesk.Controllers
 
         }
 
+        public IActionResult RoomProfile(string id)
+        {
+
+            var ds = db.Facility.SingleOrDefault(t => t.FacilityId == int.Parse(id));
+
+            var user = db.Users.Where(t => t.FacilityId == int.Parse(id)).ToList();
+            ViewBag.user = user;
+
+            return View(ds);
+
+        }
 
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
@@ -113,5 +124,8 @@ namespace OnlineHelpDesk.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+
+
     }
 }

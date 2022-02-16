@@ -1,4 +1,52 @@
 ﻿@{
     ViewData["Title"] = "Room List";
-    
+
 }
+
+
+
+<link rel="stylesheet" href="~/template/css/style.css">
+<!-- Responsive-->
+
+<!-- Scrollbar Custom CSS -->
+<link rel="stylesheet" href="~/template/css/jquery.mCustomScrollbar.min.css">
+<!-- Tweaks for older IEs-->
+
+
+
+
+<div class="row" style="margin-bottom:2%">
+
+    @foreach (var item in ViewBag.ds)
+    {
+       
+    <div class="col-sm-3 why">
+        <a href="/Home/RoomProfile?id=@item.FacilityId">
+
+            <div id="box_ho" class="why-box">
+                <i>
+                    @if (item.Image != null)
+                    {
+
+                        <img src="~/@Url.Content(item.Image)" width="200px" />
+
+                    }
+                    else
+                    {
+                        <img src="~/image/ImageSystem/roomdefualt.png" />
+
+                    }
+
+
+                </i>
+                <h3>@item.FacilityName</h3>
+                <p>@item.Description </p>
+            </div>
+        </a>
+    </div>
+    }
+
+
+
+</div>
+
