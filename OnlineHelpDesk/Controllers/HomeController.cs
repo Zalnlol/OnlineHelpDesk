@@ -102,6 +102,14 @@ namespace OnlineHelpDesk.Controllers
             var ds = db.Facility.SingleOrDefault(t => t.FacilityId == int.Parse(id));
 
             var user = db.Users.Where(t => t.FacilityId == int.Parse(id)).ToList();
+            var userre = (from userrole in db.UserRoles
+                          where userrole.RoleId == "3"
+                          join userr in db.Users
+                          on userrole.UserId equals userr.Id
+                          select userr).ToList();
+
+           
+            ViewBag.userre = userre;
             ViewBag.user = user;
 
             return View(ds);
@@ -128,6 +136,38 @@ namespace OnlineHelpDesk.Controllers
         }
 
 
+        public IActionResult User(string ? id)
+        {
+            string iduser = "";
+
+            if (id!=null)
+            {
+                iduser = id;
+            }else
+                if (HttpContext.Session.GetString("userId") != null)
+            {
+                iduser = HttpContext.Session.GetString("userId");
+            }else
+            {
+                return BadRequest();
+            }
+
+
+            var user = db.Users.SingleOrDefault(t => t.Id.Equals(iduser));
+
+
+            ViewBag.user = user;
+
+            ViewBag.Role = (from userrole in db.UserRoles
+                            where userrole.UserId.Equals(iduser)
+                            join role in db.Roles
+                            on userrole.RoleId equals role.Id
+                            select role.Name).SingleOrDefault();
+
+            return View();
+
+
+        }
 
     }
 }
