@@ -204,6 +204,9 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
                             select roles).SingleOrDefault();
             var Role = db.Roles.ToList();
 
+
+           
+
             ViewBag.FacilityUser = FacilityUser;
             ViewBag.Facility = Facility;
             ViewBag.RoleUser = RoleUser;
@@ -238,7 +241,7 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             if (roles == "1" || roles == "2")
             {
           
-                var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
+                var user = db.Users.SingleOrDefault(t => t.Id.Equals(Id));
                 user.FacilityId = 0;
               
 
@@ -246,7 +249,7 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             else
             {
 
-                var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
+                var user = db.Users.SingleOrDefault(t => t.Id.Equals(Id));
                 user.FacilityId = int.Parse(Facility);
 
             }

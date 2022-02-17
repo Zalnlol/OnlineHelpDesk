@@ -41,11 +41,13 @@
                                 <li class="nav-item">
                                     <a class="nav-link" style="color: white" href="/home#Services">Services</a>
                                 </li>
-                               
+
                             }
                             else
                             {
+                                @*@{Context.Session.SetString("userId", UserManager.GetUserAsync(User).Result?.Id)
 
+                                        };*@
 
                                 <li class="nav-item ">
                                     <a class="nav-link"style="color: white" href="/home/Roomlist">Room List</a>
@@ -74,7 +76,7 @@
                                     </a>
 
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item"  href="/home/user">Manager Profile</a>
+                                        <a class="dropdown-item"  href="/home/UserProfile">Manager Profile</a>
                                         <a class="dropdown-item"  href="#">History Report</a>
 
                                     </div>

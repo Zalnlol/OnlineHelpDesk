@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using OnlineHelpDesk.Areas.Admin.Models;
 using Microsoft.AspNetCore.Identity;
 
+
 namespace OnlineHelpDesk.Controllers
 {
     public class HomeController : Controller
@@ -22,21 +23,24 @@ namespace OnlineHelpDesk.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public HomeController(ApplicationDbContext db, SignInManager<ApplicationUser> _signInManager, UserManager<ApplicationUser> _userManager)
+        public HomeController(ApplicationDbContext db, SignInManager<ApplicationUser> _signInManager, UserManager<ApplicationUser> _userManager, ILogger<HomeController> logger)
         {
             this.db = db;
             this._userManager = _userManager;
             this._signInManager = _signInManager;
+            _logger = logger;
 
         }
 
         public IActionResult Index()
         {
+          
             return View();
         }
 
         public IActionResult Login()
         {
+         
             return View();
         }
 
@@ -136,7 +140,7 @@ namespace OnlineHelpDesk.Controllers
         }
 
 
-        public IActionResult User(string ? id)
+        public IActionResult UserProfile(string ? id)
         {
             string iduser = "";
 
@@ -144,9 +148,10 @@ namespace OnlineHelpDesk.Controllers
             {
                 iduser = id;
             }else
-                if (HttpContext.Session.GetString("userId") != null)
+                if (_userManager.GetUserAsync(User).Result?.Id != null)
             {
-                iduser = HttpContext.Session.GetString("userId");
+
+                iduser = _userManager.GetUserAsync(User).Result?.Id;
             }else
             {
                 return BadRequest();

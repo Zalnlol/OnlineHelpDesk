@@ -86,7 +86,7 @@
                             @foreach (var item in ViewBag.Facility)
                             {
 
-
+                   
 
                                 <option value="@item.FacilityId">@item.FacilityName</option>
 
@@ -144,7 +144,8 @@
         data() {
             return {
 
-                ishow: false
+                ishow: false,
+                hhh:1
 
             }
 
@@ -170,8 +171,12 @@
 
                     this.ishow = true
 
-                } else if (role == 4) {
+                } else if (role == 4 && this.hhh==0 ) {
                     document.getElementById("Facility").innerHTML = tmp;
+
+                    this.ishow = true
+                } else if (role == 4 && this.hhh == 1 ) {
+                   
 
                     this.ishow = true
                 }
@@ -181,7 +186,7 @@
                     document.getElementById("Facility").innerHTML = ` <option value="3">Receiver Room</option>`
                 }
 
-
+                this.hhh = 0
             }
 
         }
