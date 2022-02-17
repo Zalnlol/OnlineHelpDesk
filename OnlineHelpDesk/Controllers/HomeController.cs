@@ -90,7 +90,22 @@ namespace OnlineHelpDesk.Controllers
             public IActionResult Roomlist()
         {
 
-            var ds = db.Facility.Where(t => t.Status != 0).ToList();
+      
+            var userFacility = _userManager.GetUserAsync(User).Result?.FacilityId;
+            var id = _userManager.GetUserAsync(User).Result?.Id;
+            var userrole = db.UserRoles.SingleOrDefault(t => t.UserId.Equals(id)).RoleId;
+            List<Facility>   ds = new List<Facility>();
+            if (userrole =="3")
+            {
+                ds = db.Facility.Where(t => t.Status != 0  && t.FacilityId.ToString().Equals("1")).ToList();
+            }
+            else
+            {
+                 ds = db.Facility.Where(t => t.Status != 0 && t.FacilityId.ToString() != userFacility.ToString()).ToList();
+            }
+
+
+            
             var category = db.FacilityCategory.ToList();
 
             ViewBag.ds = ds;
@@ -107,14 +122,28 @@ namespace OnlineHelpDesk.Controllers
             var ds = db.Facility.SingleOrDefault(t => t.FacilityId == int.Parse(id));
 
             var user = db.Users.Where(t => t.FacilityId == int.Parse(id)).ToList();
-            var userre = (from userrole in db.UserRoles
-                          where userrole.RoleId == "3"
-                          join userr in db.Users
-                          on userrole.UserId equals userr.Id
-                          select userr).ToList();
 
+          List<ApplicationUser>   userre = new List<ApplicationUser>();
+
+            if (id=="1")
+            {
+                 userre = (from userrole in db.UserRoles
+                              where userrole.RoleId == "3"
+                              join userr in db.Users
+                              on userrole.UserId equals userr.Id
+                              select userr).ToList();
+            
+              ViewBag.userre = userre;
+            }
+            else
+            {
+                ViewBag.userre = null;
+            }
+
+          
+  
            
-            ViewBag.userre = userre;
+          
             ViewBag.user = user;
 
             return View(ds);
