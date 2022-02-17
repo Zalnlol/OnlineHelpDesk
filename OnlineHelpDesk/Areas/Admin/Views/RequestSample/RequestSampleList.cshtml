@@ -18,7 +18,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Content)
             </th>
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -32,7 +32,7 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.RequestSampleId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RequestSampleId">Details</a> |
+                @*<a asp-action="Details" asp-route-id="@item.RequestSampleId">Details</a> |*@
                 <a asp-action="Delete" asp-route-id="@item.RequestSampleId">Delete</a>
             </td>
         </tr>

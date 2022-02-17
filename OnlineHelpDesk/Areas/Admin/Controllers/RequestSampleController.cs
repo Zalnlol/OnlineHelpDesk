@@ -58,6 +58,55 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             }
             return View();
         }
+        [HttpGet]
+        public IActionResult Edit(int id) 
+        {
+            ViewBag.data = new SelectList(_context.FacilityCategory.ToList(), "FacilityCategoryId", "CategoryName");
+            var model = _context.RequestSample.Find(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(RequestSample updateRequestSample) 
+        {
+            ViewBag.data = new SelectList(_context.FacilityCategory.ToList(), "FacilityCategoryId");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var ex = _context.RequestSample.Find(updateRequestSample.RequestSampleId);
+                    ex.FacilityCategoryId = updateRequestSample.FacilityCategoryId;
+                    ex.Content = updateRequestSample.Content;
+                    _context.SaveChanges();
+                    return RedirectToAction("RequestSampleList");
+                }
+                else 
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
+            }
+            return View();
+        }
+
+
+        public IActionResult Delete(int id)
+        {
+            var model = _context.RequestSample.Find(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(RequestSample removeRequestSample)
+        {
+            var model = _context.RequestSample.SingleOrDefault(rs => rs.RequestSampleId.Equals(removeRequestSample.RequestSampleId));
+            _context.RequestSample.Remove(model);
+            _context.SaveChanges();
+            return RedirectToAction("RequestSampleList");
+        }
 
     }
 }

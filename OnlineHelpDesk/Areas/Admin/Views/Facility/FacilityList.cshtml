@@ -27,7 +27,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.FacilityCategory)
             </th>
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -51,7 +51,7 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.FacilityId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.FacilityId">Details</a> |
+                    @*<a asp-action="Details" asp-route-id="@item.FacilityId">Details</a> |*@
                     <a asp-action="Delete" asp-route-id="@item.FacilityId">Delete</a>
                 </td>
             </tr>
