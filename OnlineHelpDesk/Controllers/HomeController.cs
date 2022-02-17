@@ -89,7 +89,10 @@ namespace OnlineHelpDesk.Controllers
 
             public IActionResult Roomlist()
         {
-
+            if (_signInManager.IsSignedIn(User)==false)
+            {
+                return RedirectToAction("Login");
+            }
       
             var userFacility = _userManager.GetUserAsync(User).Result?.FacilityId;
             var id = _userManager.GetUserAsync(User).Result?.Id;

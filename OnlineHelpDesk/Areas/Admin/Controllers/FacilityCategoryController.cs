@@ -91,7 +91,7 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             return View();
         }
 
-        [HttpGet]
+
         public IActionResult Delete(string id)
         {
             var model = _context.FacilityCategory.Find(id);

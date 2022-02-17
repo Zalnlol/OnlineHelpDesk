@@ -1,41 +1,54 @@
-﻿@model IEnumerable<OnlineHelpDesk.Areas.Admin.Models.RequestSample>
+﻿@using Newtonsoft.Json;
+@using System.Net.Http;
+@using System.Net.Http.Json;
+@model IEnumerable<OnlineHelpDesk.Areas.Admin.Models.RequestSample>
 
 @{
     ViewData["Title"] = "RequestSampleList";
+    var view = JsonConvert.SerializeObject(ViewBag.data);
+    
 }
+
+@view
 
 <h1>RequestSampleList</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+@*<table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.FacilityCategoryId)
             </th>
             <th>
+                Facility Category
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Content)
             </th>
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FacilityCategoryId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RequestSampleId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RequestSampleId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RequestSampleId">Delete</a>
-            </td>
-        </tr>
-}
+        @for (int i = 0; i < view.Length; i++)
+        {
+            <tr>
+                <td>
+                    @view[i].FacilityCategoryId
+                </td>
+                <td>
+                    @view[i].CategoryName
+                </td>
+                <td>
+                    @view[i].Content
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@view[i].RequestSampleId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@view[i].RequestSampleId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
-</table>
+</table>*@
