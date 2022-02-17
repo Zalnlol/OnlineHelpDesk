@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using OnlineHelpDesk.Models;
+using OnlineHelpDesk.Areas.Admin.Models;
 
 namespace OnlineHelpDesk.Controllers
 {
@@ -21,7 +22,7 @@ namespace OnlineHelpDesk.Controllers
 
         public IActionResult Index()
         {
-            var model = db.Request.ToList();
+            var model = db.Request.ToList().Where(r => r.RequestorId == HttpContext.Session.GetString("userId"));
             return View(model);
         }
 
@@ -103,6 +104,13 @@ namespace OnlineHelpDesk.Controllers
         }
 
         public IActionResult Edit1(int id)
+        {
+            Request req = db.Request.Find(id);
+            ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
+            return View(req);
+        }
+
+        public IActionResult Approval(int id)
         {
             Request req = db.Request.Find(id);
             ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");

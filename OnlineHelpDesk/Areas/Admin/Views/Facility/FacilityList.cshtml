@@ -9,6 +9,46 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<div style="margin: 14px">
+    <form asp-action="FacilityList">
+        <select name="data" onchange="Search()">
+            @if (ViewBag.data == "")
+            {
+                <option value="">All</option>
+                @foreach (var item in TempData["facilities"] as List<String>)
+                {
+                    <option value="@item">@item</option>
+                }
+            }
+            else
+            {
+                <option value="">All</option>
+                @foreach (var item in TempData["facilities"] as List<String>)
+                {
+                    if (ViewBag.data == item)
+                    {
+                        <option value="@item" selected>@item</option>
+                    }
+                    else
+                    {
+                        <option value="@item">@item</option>
+                    }
+
+                }
+            }
+
+        </select>
+        <input type="submit" id="_submit" hidden="hidden"/>
+    </form>
+</div>
+
+<script>
+    function Search() {
+        document.getElementById('_submit').click() == true;
+    }
+</script>
+
 <table class="table">
     <thead>
         <tr>

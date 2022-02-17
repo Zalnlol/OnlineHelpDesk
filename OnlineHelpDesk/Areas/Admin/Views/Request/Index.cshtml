@@ -1,0 +1,63 @@
+﻿@model IEnumerable<OnlineHelpDesk.Models.Request>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Request List</h1>
+
+
+
+<table class="table" style="text-align: center;">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remark)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.Raw(item.Remark)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
+                <a asp-action="Delete" asp-route-id="@item.RequestId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

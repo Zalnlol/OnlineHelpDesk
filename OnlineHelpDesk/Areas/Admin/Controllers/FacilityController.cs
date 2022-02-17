@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineHelpDesk.Areas.Admin.Models;
 using OnlineHelpDesk.Data;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OnlineHelpDesk.Areas.Admin.Controllers
@@ -22,10 +23,25 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult FacilityList()
+        public IActionResult FacilityList(String data)
         {
             var facilityList = _context.Facility.ToList();
-            return View(facilityList);
+            List<String> facilityName = new List<String>();
+            for (int i = 0; i < facilityList.Count; i++)
+            {
+                facilityName.Add(facilityList[i].FacilityName);
+            }
+            TempData["facilities"] = facilityName;
+            ViewBag.data = data;
+            if (String.IsNullOrEmpty(data))
+            {
+                return View(facilityList);
+            }
+            else
+            {
+                facilityList = _context.Facility.ToList().FindAll(f => f.FacilityName.Equals(data));
+                return View(facilityList);
+            }
         }
 
         public IActionResult Create()
