@@ -82,7 +82,7 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
                         var filePath = Path.Combine("wwwroot/image/ImageSystem", file.FileName);
                         var stream = new FileStream(filePath, FileMode.Create);
                         file.CopyToAsync(stream);
-                        ex.Image = "image/ImageSystem" + file.FileName;
+                        ex.Image = "image/ImageSystem/" + file.FileName;
                         ex.FacilityName = updateFacility.FacilityName;
                         ex.Description = updateFacility.Description;
                         _context.SaveChanges();

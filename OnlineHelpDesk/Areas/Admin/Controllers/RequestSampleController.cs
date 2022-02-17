@@ -25,7 +25,14 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
 
         public IActionResult RequestSampleList()
         {
+            
             var requestList = _context.RequestSample.ToList();
+            var viewFacilityCategoryName = (from fc in requestList
+                                            join abc in _context.FacilityCategory
+                                            on fc.FacilityCategoryId
+                                            equals abc.FacilityCategoryId
+                                            select new { fc.RequestSampleId ,fc.FacilityCategoryId, fc.Content, abc.CategoryName }).ToArray();
+            ViewBag.data = viewFacilityCategoryName;
             return View(requestList);
         }
 
