@@ -33,28 +33,28 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FacilityName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FacilityCategoryId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Image)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FacilityCategory.FacilityCategoryId)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.FacilityId">Edit</a> |
-                    @*<a asp-action="Details" asp-route-id="@item.FacilityId">Details</a> |*@
-                    <a asp-action="Delete" asp-route-id="@item.FacilityId">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityCategoryId)
+            </td>
+            <td>
+                <img src="~/@Url.Content(item.Image)" width="120" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityCategory.FacilityCategoryId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FacilityId">Edit</a> |
+                @*<a asp-action="Details" asp-route-id="@item.FacilityId">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.FacilityId">Delete</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

@@ -11,7 +11,7 @@ namespace OnlineHelpDesk.Areas.Admin.Models
     public class Facility
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int FacilityId { get; set; }
         [Required]
         public string FacilityName { get; set; }
