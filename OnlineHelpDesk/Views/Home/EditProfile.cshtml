@@ -1,0 +1,276 @@
+﻿@model OnlineHelpDesk.Areas.Admin.Models.RegisterUserModel;
+<script src="~/js/Validate.js"></script>
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+@using Newtonsoft.Json;
+@using System.Net.Http;
+@using System.Net.Http.Json;
+<!--CND VueJs-->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
+
+
+
+<h3 style="text-align:center; margin-bottom:2%">Edit Profile</h3>
+
+<div class="row" id="myApp">
+    <div class="col-sm-3"></div>
+
+
+
+    <div class="col-sm-6">
+        <form asp-action="EditProfile" onsubmit="return checknull()" asp-controller="Home" enctype="multipart/form-data" method="post">
+
+            <div class="row" style="margin-bottom:5%">
+                <div class="col-sm-5">
+                    <label style="text-align:left" class="control-label">Email:</label>
+                </div>
+                <div class="col-sm-7">
+                    <input asp-for="Email" disabled id="Email" v-on:keyup="checkvalidate()" class="form-control" placeholder="Enter Email" v-model.trim="Email" />
+                    <span style="text-align: left; color: red; font-style: italic" ref="mail" id="mail"></span>
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-bottom:5%">
+                <div class="col-sm-5">
+                    <label class="control-label" style="text-align:left">Phone Number:</label>
+                </div>
+                <div class="col-sm-7">
+                    <input asp-for="PhoneNumber" id="PhoneNumber" class="form-control" v-on:keyup="checkvalidate()" placeholder="Enter Phone Number" v-model.trim="PhoneNumber" />
+                    <span style="text-align: left; color: red; font-style: italic" ref="phone" id="phone"></span>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:5%">
+                <div class="col-sm-5">
+                    <label class="control-label" style="text-align:left">Full Name:</label>
+                </div>
+                <div class="col-sm-7">
+                    <input asp-for="FullName" id="FullName" class="form-control" v-on:keyup="checkvalidate()" placeholder="Enter Full Name" v-model.trim="FullName" />
+                    <span style="text-align: left; color: red; font-style: italic" ref="fname" id="fname"></span>
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-bottom:5%">
+                <div class="col-sm-5">
+                    <label class="control-label" style="text-align:left">Gender:</label>
+                </div>
+                <div class="col-sm-7">
+                    <select class="form-control" name="Gender" asp-for="Gender">
+                        <option value="True">Male</option>
+                        <option value="False">Fmale</option>
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom:5%">
+                <div class="col-sm-5">
+                    <label class="control-label" style="text-align:left">Upload Avatar:</label>
+                </div>
+                <div class="col-sm-7">
+                    <input type="file" class="custom-file-input" name="File" id="photoQuestion" onchange="validationPhotoQuestion()" class="form-control" />
+
+                    <label class="custom-file-label" id="image_label" for="">Add Image</label>
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-bottom:5%">
+                <div class="col-sm-5">
+     
+                </div>
+                <div class="col-sm-7">
+                    <img src="~/@Url.Content(Model.Avatar)" id="imageavt" width="200px" />
+
+
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-bottom:5%">
+
+                <div class="col" style="text-align:center">
+
+
+                    <input type="submit" class="btn btn-outline-success" ref="submit" :disabled="Disable" value="Next" />
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+    <div class="col-sm-3"></div>
+
+</div>
+
+<pre id="ds">@JsonConvert.SerializeObject(ViewBag.ds)</pre>
+
+
+<script>
+
+
+
+
+    var App = new Vue({
+        el: "#myApp",
+        created() {
+            this.load();
+        },
+  
+        data() {
+            return {
+                Email: "",
+                PhoneNumber: "",
+                FullName: "",
+                Disable: false
+
+            }
+
+        },
+        methods: {
+
+            load: function () {
+                var ds1 = JSON.parse(document.getElementById("ds").innerText);
+
+                var timeconvert = document.getElementById("ds");
+                timeconvert.parentNode.removeChild(timeconvert);
+
+                console.log(ds1);
+
+                this.Email = ds1.Email;
+                this.FullName = ds1.FullName;
+                this.PhoneNumber = ds1.PhoneNumber;
+             
+
+
+
+
+            },
+
+            checkvalidate: function () {
+
+
+               
+
+                if (this.PhoneNumber != "") {
+                    if (phonecheck.test(this.PhoneNumber) == false && this.PhoneNumber != 10) {
+                        this.$refs.phone.innerText = "Phone number is numeric and has 10 number"
+                        this.Disable = true;
+                    } else {
+                        this.$refs.phone.innerText = ""
+                        this.Disable = false;
+                    }
+                }
+
+                if (this.FullName != "") {
+                    if (namecheck.test(this.FullName) == false) {
+                        this.$refs.fname.innerText = "Name cannot contain special characters"
+                        this.Disable = true;
+                    } else {
+                        this.$refs.fname.innerText = ""
+                        this.Disable = false;
+                    }
+                }
+
+
+
+
+            },
+
+
+        }
+
+    })
+
+</script>
+
+<script>
+
+    function checknull() {
+
+        let checkvalidate = true;
+
+ 
+
+
+        if (document.getElementById("PhoneNumber").value.trim() == "") {
+
+            document.getElementById("phone").innerText = "Confirm Password is not Null"
+            checkvalidate = false;
+
+
+
+        } else {
+            document.getElementById("phone").innerText = ""
+
+        }
+
+        if (document.getElementById("FullName").value.trim() == "") {
+
+            document.getElementById("fname").innerText = "Full name is not Null"
+
+            checkvalidate = false;
+
+
+        } else {
+            document.getElementById("fname").innerText = ""
+
+
+        }
+
+
+        if (checkvalidate == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
+<script>
+
+    function validationPhotoQuestion() {
+        var fileName = $('#photoQuestion').val().split("\\").pop();
+
+        daucham = fileName.lastIndexOf(".");
+
+        size = Number($('#photoQuestion')[0].files[0].size);
+
+
+
+        duoifile = fileName.slice(daucham + 1, fileName.length);
+        duoifile = duoifile.toLowerCase();
+
+        if (((duoifile == "jpg") || (duoifile == "png") || (duoifile == "jpeg")) && (size <= 10485760)) {
+
+          
+
+            $('#photoQuestion').siblings("#image_label").addClass("selected").html(fileName);
+
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                // get loaded data and render thumbnail.
+
+
+                document.getElementById("imageavt").src = e.target.result;
+            };
+
+            // read the image file as a data URL.
+            reader.readAsDataURL($('#photoQuestion')[0].files[0]);
+
+
+        } else {
+            alert("Incorrect formatIncorrect image format");
+
+        }
+
+    }
+
+</script>

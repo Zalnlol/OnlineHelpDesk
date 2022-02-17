@@ -41,5 +41,8 @@ namespace OnlineHelpDesk.Areas.Admin.Models
         [RegularExpression("^(?!0+$)(\\+\\d{1,3}[- ]?)?(?!0+$)\\d{10,15}$", ErrorMessage = "Please enter valid phone no.")]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
+
+        public string Avatar { get; set; }
+
     }
 }

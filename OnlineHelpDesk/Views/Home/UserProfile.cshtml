@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "User Profile";
+}
+
+@using Microsoft.AspNetCore.Identity
+@using OnlineHelpDesk.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Http;
+
+<div class="container" style="min-height:1000px">
+
+    <div class="row">
+        <div class="col">
+            <img style="max-width:100%" src="~/image/ImageSystem/profilebackground.jpg" />
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:2%; margin-left:10%">
+        <div class="col-sm-4">
+
+            <img width="200px"  height="200px" class="rounded-circle " style="max-width: 200px; max-height: 200px; vertical-align: text-top" src="~/@Url.Content(ViewBag.user.Avatar)" />
+        </div>
+
+        <div class="col-sm-8">
+            <br />
+
+
+            <h3>@ViewBag.user.FullName</h3>
+            <br />
+            <b>Gender:</b> <span>@if (@ViewBag.user.Gender) { <span>Male</span> } else {<span>Fmale</span> }</span>
+            <br />
+            <b>Mail:</b> <span>@ViewBag.user.Email</span>
+            <br />
+            <b>Phone:</b> <span>@ViewBag.user.PhoneNumber</span>
+            <br />
+            <b>Role:</b> <span>@ViewBag.Role</span>
+
+        </div>
+    </div>
+
+
+    @if (@UserManager.GetUserAsync(User).Result?.FullName != null)
+    {
+        if (@UserManager.GetUserAsync(User).Result?.Id.Equals(ViewBag.user.Id))
+        {
+            <div class="row" style="margin-top:5%">
+                <div class="col" style="text-align:center">
+
+                    <a href="/home/EditProfile">
+                        <button class="btn btn-success">Change Information </button>
+                    </a>
+
+                    <a href="/Identity/Account/Manage/ChangePassword">
+                        <button class="btn btn-info">Change Password </button>
+                    </a>
+
+                </div>
+            </div>
+        }
+
+
+
+
+    }
+
+
+</div>
