@@ -36,7 +36,6 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
                                                 FacilityCategoryId=     fc.FacilityCategoryId,
                                                 Content=  fc.Content,
                                                 CategoryName=   abc.CategoryName }).ToList();
-            //ViewBag.data = viewFacilityCategoryName;
             return View(requestList);
         }
 
