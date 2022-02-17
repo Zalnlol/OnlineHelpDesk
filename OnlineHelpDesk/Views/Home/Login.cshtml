@@ -3,35 +3,72 @@
 @{
     TempData["Title"] = "Login";
 }
+
+
+
+
+<link rel="stylesheet" type="text/css" href="~/login/css/util.css">
+<link rel="stylesheet" type="text/css" href="~/login/css/main.css">
+
+
+
+
 <script src="~/js/Validate.js"></script>
 <!--CND VueJs-->
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-<div id="myApp">
+<div id="myApp" style="min-height:500px" >
 
 
 
-    <div class="form-group">
-        <label>Mail</label>
-        <input type="text" v-model="Mail" />
-    </div>
+        <div class="container-login100" style="min-height:700px">
+            <div class="wrap-login100">
+                <div class="login100-pic js-tilt" data-tilt>
+                    <img src="~/login/images/img-01.png" alt="IMG">
+                </div>
+
+                <form class="login100-form validate-form">
+                    <span class="login100-form-title">
+                        Member Login
+                    </span>
+
+                    <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+                        <input class="input100" type="text" v-model="Mail" name="email" placeholder="Email">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Password is required">
+                        <input class="input100" type="password" v-model="Password" name="pass" placeholder="Password">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </span>
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <button class="login100-form-btn"  v-on:click.prevent="Login()">
+                            Login
+                        </button>
+                    </div>
+
+     
+                    <div class="wrap-input100 validate-input" data-validate="Password is required">
+                        <label class="text-danger" ref="error"></label>
+                    </div>
 
 
-    <div class="form-group">
-        <label>Password</label>
-        <input type="password" v-model="Password" />
-    </div>
+                </form>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label class="text-danger" ref="error"></label>
-    </div>
-    <div class="form-group">
-        <button v-on:click.prevent="Login()" class="btn btn-success">Submit</button>
-    </div>
-
-
-    
 
 </div>
+
+
+
+
 <script>
     var App = new Vue({
         el: "#myApp",
@@ -44,7 +81,7 @@
         },
         methods: {
             Login: function () {
-                
+
                 if ((this.Mail == "") && (this.Password == "")) {
                     this.$refs.error.innerText = "Email and Password cannot be left blank"
 
@@ -64,9 +101,9 @@
 
 
                 }
-                
 
-      
+
+
                 if (check.test(this.Mail) == false) {
                     this.$refs.error.innerText = "Email is not in the correct format"
                 } else {
@@ -84,15 +121,15 @@
                             location.href = "/admin/admin"
                         }
                         else
-                        if (request.responseText == "true") {
+                            if (request.responseText == "true") {
 
 
 
-                            location.href = "/home/Roomlist"
-                        } else {
-                            this.$refs.error.innerText = request.responseText
-                          
-                        }
+                                location.href = "/home/Roomlist"
+                            } else {
+                                this.$refs.error.innerText = request.responseText
+
+                            }
 
 
                     }
@@ -105,6 +142,6 @@
             }
 
         }
-        })
+    })
 
 </script>
