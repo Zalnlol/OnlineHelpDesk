@@ -12,6 +12,7 @@ using OnlineHelpDesk.Models;
 using Microsoft.AspNetCore.Http;
 using OnlineHelpDesk.Areas.Admin.Models;
 using Microsoft.AspNetCore.Identity;
+using System.IO;
 
 
 namespace OnlineHelpDesk.Controllers
@@ -171,6 +172,63 @@ namespace OnlineHelpDesk.Controllers
 
             return View();
 
+
+        }
+
+
+
+        public IActionResult EditProfile()
+        {
+            var userid = _userManager.GetUserAsync(User).Result?.Id;
+            var ds = db.Users.SingleOrDefault(t => t.Id.Equals(userid));
+
+            RegisterUserModel registerUserModel = new RegisterUserModel();
+
+            registerUserModel.Id = ds.Id;
+            registerUserModel.FullName = ds.FullName;
+            registerUserModel.Email = ds.Email;
+            registerUserModel.Avatar = ds.Avatar;
+            registerUserModel.Gender = ds.Gender;
+            registerUserModel.PhoneNumber = ds.PhoneNumber;
+
+            //return BadRequest(registerUserModel);
+
+            ViewBag.ds = registerUserModel;
+
+            return View(registerUserModel);
+
+        }
+
+        [HttpPost]
+        public IActionResult EditProfile(RegisterUserModel registerUserModel, IFormFile File)
+        {
+
+            var id = _userManager.GetUserAsync(User).Result?.Id;
+            var userchange = db.Users.SingleOrDefault(t => t.Id.Equals(id));
+
+            if (File != null)
+            {
+                var filePath = Path.Combine("wwwroot/image/Userimage/", File.FileName);
+                var stream = new FileStream(filePath, FileMode.Create);
+                File.CopyToAsync(stream);
+                registerUserModel.Avatar = "image/Userimage/" + File.FileName;
+            }
+            else
+            {
+                registerUserModel.Avatar = userchange.Avatar;
+            }
+
+            userchange.FullName = registerUserModel.FullName;
+            userchange.Gender = registerUserModel.Gender;
+            userchange.PhoneNumber = registerUserModel.PhoneNumber;
+            userchange.Avatar = registerUserModel.Avatar;
+
+            db.SaveChanges();
+
+
+
+
+            return RedirectToAction("UserProfile");
 
         }
 
