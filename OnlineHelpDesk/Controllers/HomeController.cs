@@ -119,18 +119,6 @@ namespace OnlineHelpDesk.Controllers
 
         }
 
-        public IActionResult RoomManager() 
-        {
-            if (_signInManager.IsSignedIn(User) == false)
-            {
-                return RedirectToAction("Login");
-            }
-
-            var id = _userManager.GetUserAsync(User).Result?.FacilityId;
-            var facilityManaged = db.Facility.Where(t => t.FacilityId == id);
-            return View(facilityManaged);
-        }
-
         public IActionResult RoomProfile(string id)
         {
 
@@ -154,10 +142,6 @@ namespace OnlineHelpDesk.Controllers
             {
                 ViewBag.userre = null;
             }
-
-          
-  
-           
           
             ViewBag.user = user;
 

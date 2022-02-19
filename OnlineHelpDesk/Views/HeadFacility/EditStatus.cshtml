@@ -1,0 +1,60 @@
+﻿@model OnlineHelpDesk.Areas.Admin.Models.Facility
+
+@{
+    ViewData["Title"] = "EditStatus";
+}
+
+<h1>EditStatus</h1>
+
+<h4>Facility</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditStatus" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="FacilityId" />
+            <div class="form-group">
+                <label asp-for="FacilityName" class="control-label"></label>
+                <input asp-for="FacilityName" class="form-control" />
+                <span asp-validation-for="FacilityName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <img src="~/@Url.Content(Model.Image)" width="120" />
+                <input name="file" type="file" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="RentalStatus" /> @Html.DisplayNameFor(model => model.RentalStatus)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="FacilityCategoryId" class="control-label"></label>
+                <select asp-for="FacilityCategoryId" class="form-control" asp-items="ViewBag.data">
+                    <option>---Selected---</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="RoomManager">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

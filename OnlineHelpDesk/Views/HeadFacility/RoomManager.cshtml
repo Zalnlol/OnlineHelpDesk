@@ -41,12 +41,16 @@
                 </td>
                 <td>
                     @if (item.Status == 1)
-                    {<span> Vacancy </span>}
+                    {
+                    <span> Vacancy &#9989; </span>
+                    }
                     else
-                    { <span> Occupied </span>}
+                    {
+                    <span> Occupied &#128308;</span>
+                    }
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.FacilityId">Change Status</a>
+                    <a asp-action="EditStatus" asp-route-id="@item.FacilityId">Change Status</a>
                 </td>
             </tr>
         }
