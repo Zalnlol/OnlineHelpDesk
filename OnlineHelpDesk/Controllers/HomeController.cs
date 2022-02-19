@@ -87,7 +87,7 @@ namespace OnlineHelpDesk.Controllers
 
         }
 
-            public IActionResult Roomlist()
+        public IActionResult Roomlist()
         {
             if (_signInManager.IsSignedIn(User)==false)
             {
@@ -117,6 +117,18 @@ namespace OnlineHelpDesk.Controllers
             return View();
 
 
+        }
+
+        public IActionResult RoomManager() 
+        {
+            if (_signInManager.IsSignedIn(User) == false)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var id = _userManager.GetUserAsync(User).Result?.FacilityId;
+            var facilityManaged = db.Facility.Where(t => t.FacilityId == id);
+            return View(facilityManaged);
         }
 
         public IActionResult RoomProfile(string id)

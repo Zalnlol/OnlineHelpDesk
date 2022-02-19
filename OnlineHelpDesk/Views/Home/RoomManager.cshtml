@@ -1,0 +1,56 @@
+﻿@model IEnumerable<OnlineHelpDesk.Areas.Admin.Models.Facility>
+@{
+    ViewData["Title"] = "Room Manager";
+
+}
+
+<link rel="stylesheet" href="~/template/css/style.css">
+<!-- Responsive-->
+<!-- Scrollbar Custom CSS -->
+<link rel="stylesheet" href="~/template/css/jquery.mCustomScrollbar.min.css">
+<!-- Tweaks for older IEs-->
+
+
+<h1 style="text-align:center">Room Manager</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FacilityName)
+                </td>
+                <td>
+                    <img src="~/@Url.Content(item.Image)" width="120" />
+                </td>
+                <td>
+                    @if (item.Status == 1)
+                    {<span> Vacancy </span>}
+                    else
+                    { <span> Occupied </span>}
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.FacilityId">Change Status</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
