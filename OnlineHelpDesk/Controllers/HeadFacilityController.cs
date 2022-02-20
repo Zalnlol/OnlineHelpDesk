@@ -36,7 +36,7 @@ namespace OnlineHelpDesk.Controllers
             }
 
             var id = _userManager.GetUserAsync(User).Result?.FacilityId;
-            var facilityManaged = db.Facility.Where(t => t.FacilityId == id);
+            var facilityManaged = db.Facility.SingleOrDefault(t => t.FacilityId == id);
             return View(facilityManaged);
         }
 
@@ -52,37 +52,40 @@ namespace OnlineHelpDesk.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditStatus(Facility updateFacility, IFormFile file)
+        public IActionResult EditStatus(Facility updateFacility, IFormFile file, string Status)
         {
-            ViewBag.data = new SelectList(db.FacilityCategory.ToList(), "FacilityCategoryId", "CategoryName");
-            try
+          
+
+            if (Status=="true")
             {
-                if (ModelState.IsValid)
-                {
-                    if (file.Length > 0)
+                updateFacility.Status = 1;
+
+            }
+            else
+            {
+                updateFacility.Status = 0;
+
+            }
+
+         
+                var ex = db.Facility.SingleOrDefault(t => t.FacilityId.Equals(updateFacility.FacilityId));
+
+                if (file !=null)
                     {
-                        var ex = db.Facility.Find(updateFacility.FacilityId);
-                        var filePath = Path.Combine("wwwroot/image/ImageSystem", file.FileName);
-                        var stream = new FileStream(filePath, FileMode.Create);
-                        file.CopyToAsync(stream);
-                        ex.Image = "image/ImageSystem/" + file.FileName;
-                        ex.FacilityName = updateFacility.FacilityName;
-                        ex.Description = updateFacility.Description;
-                        ex.RentalStatus = updateFacility.RentalStatus;
-                        db.SaveChanges();
-                        return RedirectToAction("RoomManager");
-                    }
+                    var filePath = Path.Combine("wwwroot/image/ImageSystem", file.FileName);
+                    var stream = new FileStream(filePath, FileMode.Create);
+                    file.CopyToAsync(stream);
+                    ex.Image = "image/ImageSystem/" + file.FileName;
                 }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError(string.Empty, e.Message);
-            }
-            return View();
+                ex.FacilityName = updateFacility.FacilityName;
+                ex.Description = updateFacility.Description;
+                ex.Status = updateFacility.Status;
+                ex.RentalStatus = updateFacility.RentalStatus;
+                db.SaveChanges();
+               
+
+         
+            return RedirectToAction("RoomManager");
         }
     }
 }
