@@ -87,7 +87,7 @@ namespace OnlineHelpDesk.Controllers
 
         }
 
-            public IActionResult Roomlist()
+        public IActionResult Roomlist()
         {
             if (_signInManager.IsSignedIn(User)==false)
             {
@@ -142,10 +142,6 @@ namespace OnlineHelpDesk.Controllers
             {
                 ViewBag.userre = null;
             }
-
-          
-  
-           
           
             ViewBag.user = user;
 

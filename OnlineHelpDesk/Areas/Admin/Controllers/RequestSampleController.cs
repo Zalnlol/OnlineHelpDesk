@@ -27,12 +27,15 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
         {
             
             var requestList = _context.RequestSample.ToList();
-            var viewFacilityCategoryName = (from fc in requestList
+            ViewBag.data = (from fc in requestList
                                             join abc in _context.FacilityCategory
                                             on fc.FacilityCategoryId
                                             equals abc.FacilityCategoryId
-                                            select new { fc.RequestSampleId ,fc.FacilityCategoryId, fc.Content, abc.CategoryName }).ToArray();
-            ViewBag.data = viewFacilityCategoryName;
+                                            select new RequestSampleMix() {
+                                                RequestSampleId =    fc.RequestSampleId ,
+                                                FacilityCategoryId=     fc.FacilityCategoryId,
+                                                Content=  fc.Content,
+                                                CategoryName=   abc.CategoryName }).ToList();
             return View(requestList);
         }
 
