@@ -2,11 +2,31 @@
 
 @{
     ViewData["Title"] = "Index";
+    String spacebar = "To";
 }
 
 <h1>Request List</h1>
 
-
+<div style="margin: 14px">
+    <form asp-action="Index">
+        @if (ViewBag.startDate == "" && ViewBag.endDate == "")
+        {
+            <input type="datetime-local" name="startDate" />
+            @spacebar;
+            <input type="datetime-local" name="endDate" />
+        }
+        else
+        {
+            <input type="datetime-local" name="startDate" value="@ViewBag.startDate" />
+            @spacebar;
+            <input type="datetime-local" name="endDate" value="@ViewBag.endDate" />
+        }
+        &nbsp;
+        <input type="submit" value="Filter" name="_button" class="btn btn-outline-primary" />
+        &nbsp;
+        <input type="submit" value="Reset" name="_button" class="btn btn-outline-primary" />
+    </form>
+</div>
 
 <table class="table" style="text-align: center;">
     <thead>
@@ -21,43 +41,70 @@
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Remark)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FacilityId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RequestTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.Raw(item.Remark)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
-                <a asp-action="Delete" asp-route-id="@item.RequestId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            if (item.Status != "Unresolved" && item.Status != "Resolved")
+            {
+                <tr>
+                    <td>
+                        @foreach (var _item in ViewBag.facilities)
+                        {
+                            if (item.FacilityId == _item.FacilityId)
+                            {
+                                <p>@_item.FacilityName</p>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                    <td>
+                        @Html.Raw(item.Remark)
+                    </td>
+                    <td>
+ 
+                        <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
+                        <a asp-action="Delete" asp-route-id="@item.RequestId">Delete</a>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @foreach (var _item in ViewBag.facilities)
+                        {
+                            if (item.FacilityId == _item.FacilityId)
+                            {
+                                <p>@_item.FacilityName</p>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.Raw(item.Remark)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
+                        <a asp-action="Delete" asp-route-id="@item.RequestId">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>

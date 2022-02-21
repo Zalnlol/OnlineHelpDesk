@@ -20,23 +20,85 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             this.db = _db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(String startDate, String endDate, String _button)
         {
-            List<String> facilityName = new List<String>();
-            List<Facility> facilities = db.Facility.ToList();
-            for (int i = 0; i < facilities.Count; i++)
+            List<Request> model = db.Request.Where(m=>m.Status == "Waiting for approval" ||
+                                                      m.Status == "Unresolved").ToList();
+            ViewBag.facilities = db.Facility.ToList();
+            if (String.IsNullOrEmpty(startDate) && String.IsNullOrEmpty(endDate) || _button == "Reset")
             {
-                facilityName.Add(facilities[i].FacilityName);
+                return View(model);
             }
-            TempData["facilities"] = facilityName;
-            List<Request> model = db.Request.Where(m=>m.Status == "Waiting for approval").ToList();
-            return View(model);
+            else if (String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate))
+            {
+                return View(model);
+            }
+            else
+            {
+                DateTime _startDate = DateTime.Parse(startDate);
+                DateTime _endDate = DateTime.Parse(endDate);
+                int startDay = _startDate.Day;
+                int startMonth = _startDate.Month;
+                int startYear = _startDate.Year;
+
+                int endDay = _endDate.Day;
+                int endMonth = _endDate.Month;
+                int endYear = _endDate.Year;
+
+
+                model = model.FindAll(m => m.StartDate.Day >= startDay &&
+                                      m.StartDate.Month >= startMonth &&
+                                      m.StartDate.Year >= startYear 
+                                      &&
+                                      m.EndDate.Day <= endDay &&
+                                      m.EndDate.Month <= endMonth &&
+                                      m.EndDate.Year <= endYear);
+
+                ViewBag.startDate = startDate;
+                ViewBag.endDate = endDate;
+                return View(model);
+            }
+           
         }
 
-        public IActionResult Index1()
+        public IActionResult Index1(String startDate, String endDate, String _button)
         {
-            List<Request> model = db.Request.Where(m => m.Status != "Waiting for approval").ToList();
-            return View(model);
+            List<Request> model = db.Request.Where(m => m.Status != "Waiting for approval" &&
+                                                        m.Status != "Unresolved").ToList();
+            ViewBag.facilities = db.Facility.ToList();
+            if (String.IsNullOrEmpty(startDate) && String.IsNullOrEmpty(endDate) || _button == "Reset")
+            {
+                return View(model);
+            }
+            else if (String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate))
+            {
+                return View(model);
+            }
+            else
+            {
+                DateTime _startDate = DateTime.Parse(startDate);
+                DateTime _endDate = DateTime.Parse(endDate);
+                int startDay = _startDate.Day;
+                int startMonth = _startDate.Month;
+                int startYear = _startDate.Year;
+
+                int endDay = _endDate.Day;
+                int endMonth = _endDate.Month;
+                int endYear = _endDate.Year;
+
+
+                model = model.FindAll(m => m.StartDate.Day >= startDay &&
+                                      m.StartDate.Month >= startMonth &&
+                                      m.StartDate.Year >= startYear
+                                      &&
+                                      m.EndDate.Day <= endDay &&
+                                      m.EndDate.Month <= endMonth &&
+                                      m.EndDate.Year <= endYear);
+
+                ViewBag.startDate = startDate;
+                ViewBag.endDate = endDate;
+                return View(model);
+            }
         }
 
         public IActionResult Details(int id)
@@ -46,5 +108,6 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             ViewBag.userFullName = user.FullName;
             return View(model);
         }
+
     }
 }

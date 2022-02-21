@@ -33,7 +33,7 @@
     /* Injected CSS Code */
 </style>
 
-<form class="jotform-form" asp-action="Create" method="post">
+<form class="jotform-form" asp-action="Create" method="post" enctype="multipart/form-data">
 
     <div role="main" class="form-all">
         <style>
@@ -53,7 +53,7 @@
             </li>
 
             <li class="form-line form-line-column form-col-1" data-type="control_dropdown" id="id_16">
-                <label class="form-label form-label-top" id="label_16" for="input_16"> Facility </label>
+                <label class="form-label form-label-top" id="label_16" for="input_16"> FacilityId </label>
                 <div id="cid_16" class="form-input-wide" data-layout="half">
                     <select class="form-dropdown" id="input_16" asp-for="FacilityId" style="width:150px" data-component="dropdown" asp-items="ViewBag.facilityList">
                         <option>--Selected--</option>
@@ -61,7 +61,7 @@
                 </div>
             </li>
             <li class="form-line" data-type="control_textbox" id="id_21">
-                <label class="form-label form-label-top form-label-auto" id="label_21" for="input_21"> Start Date </label>
+
                 <div id="cid_21" class="form-input-wide" data-layout="half">
                     <input type="datetime-local" id="startDate" asp-for="StartDate" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" value="" data-component="textbox" aria-labelledby="label_21" />
                 </div>
@@ -90,7 +90,6 @@
             </li>
         </ul>
     </div>
-    <script src="~/ckeditor/ckeditor.js"></script>
     <script>
         var divWarningDate = document.getElementById('warning-Date');
         divWarningDate.style.display = "none";

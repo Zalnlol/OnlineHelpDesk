@@ -20,10 +20,48 @@ namespace OnlineHelpDesk.Controllers
             this.db = _db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(String startDate, String endDate, String _button)
         {
-            var model = db.Request.ToList().Where(r => r.RequestorId == HttpContext.Session.GetString("userId"));
-            return View(model);
+            var model = db.Request.ToList();
+            if (HttpContext.Session.GetString("Role") == "2")
+            {
+                model = db.Request.ToList().FindAll(r => r.RequestorId == HttpContext.Session.GetString("userId"));
+            }
+            
+            ViewBag.facilities = db.Facility.ToList();
+            if (String.IsNullOrEmpty(startDate) && String.IsNullOrEmpty(endDate) || _button == "Reset")
+            {
+                return View(model);
+            }
+            else if (String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate))
+            {
+                return View(model);
+            }
+            else
+            {
+                DateTime _startDate = DateTime.Parse(startDate);
+                DateTime _endDate = DateTime.Parse(endDate);
+                int startDay = _startDate.Day;
+                int startMonth = _startDate.Month;
+                int startYear = _startDate.Year;
+
+                int endDay = _endDate.Day;
+                int endMonth = _endDate.Month;
+                int endYear = _endDate.Year;
+
+
+                model = model.FindAll(m => m.StartDate.Day >= startDay &&
+                                      m.StartDate.Month >= startMonth &&
+                                      m.StartDate.Year >= startYear
+                                      &&
+                                      m.EndDate.Day <= endDay &&
+                                      m.EndDate.Month <= endMonth &&
+                                      m.EndDate.Year <= endYear);
+
+                ViewBag.startDate = startDate;
+                ViewBag.endDate = endDate;
+                return View(model);
+            }
         }
 
         public IActionResult Details(int id)
@@ -34,7 +72,7 @@ namespace OnlineHelpDesk.Controllers
 
         public IActionResult Create()
         {            
-            ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
+            ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f=>f.RentalStatus == true), "FacilityId", "FacilityName");
             return View();
         }
 
@@ -68,7 +106,7 @@ namespace OnlineHelpDesk.Controllers
         public IActionResult Edit(int id)
         {
             Request req = db.Request.Find(id);
-            ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
+            ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f => f.RentalStatus == true), "FacilityId", "FacilityName");
             return View(req);
         }
 
@@ -93,7 +131,7 @@ namespace OnlineHelpDesk.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Edit1", "Request", req.RequestId);
+                    return RedirectToAction("Edit1", "Request", new { id = req.RequestId });
                 }
             }
             catch (Exception e)
@@ -106,15 +144,67 @@ namespace OnlineHelpDesk.Controllers
         public IActionResult Edit1(int id)
         {
             Request req = db.Request.Find(id);
-            ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
+            ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f => f.RentalStatus == true), "FacilityId", "FacilityName");
             return View(req);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                Request req = db.Request.SingleOrDefault(r => r.RequestId == id);
+                db.Request.Remove(req);
+                await db.SaveChangesAsync();
+                ViewBag.msg = "Delete completed successfully!";
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.InnerException.Message);
+            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult Approval(int id)
         {
             Request req = db.Request.Find(id);
-            ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
+            ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f => f.RentalStatus == true), "FacilityId", "FacilityName");
+            if (req.Status == "Waiting for approval" || req.Status == "Approved" || req.Status == "Unapproved")
+            {
+                ViewBag.Approved = "Approved";
+                ViewBag.Unapproved = "Unapproved";
+            }
+            else
+            {
+                ViewBag.Approved = "Resolved";
+                ViewBag.Unapproved = "Unresolved";
+            }
             return View(req);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Approval(Request req, String status)
+        {
+            try
+            {
+                req = db.Request.Find(req.RequestId);           
+                if (HttpContext.Session.GetString("Role") == "4")
+                {
+
+                    req.Status = status;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Edit1", "Request", new { id = req.RequestId });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+       
     }
 }

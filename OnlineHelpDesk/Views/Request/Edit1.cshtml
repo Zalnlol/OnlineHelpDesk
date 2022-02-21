@@ -56,7 +56,7 @@
             <li class="form-line form-line-column form-col-1" data-type="control_dropdown" id="id_16">
                 <label class="form-label form-label-top" id="label_16" for="input_16"> FacilityId </label>
                 <div id="cid_16" class="form-input-wide" data-layout="half">
-                    <select class="form-dropdown" id="input_16" asp-for="FacilityId" style="width:150px" data-component="dropdown" asp-items="ViewBag.facilityList">
+                    <select class="form-dropdown" id="input_16" asp-for="FacilityId" disabled="disabled" style="width:150px" data-component="dropdown" asp-items="ViewBag.facilityList">
                         <option>--Selected--</option>
                     </select>
                 </div>
@@ -64,26 +64,26 @@
             <li class="form-line" data-type="control_textbox" id="id_21">
                 <label class="form-label form-label-top form-label-auto" id="label_21" for="input_21"> Start Date </label>
                 <div id="cid_21" class="form-input-wide" data-layout="half">
-                    <input type="datetime-local" id="startDate" asp-for="StartDate" value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_21" />
+                    <input type="datetime-local" id="startDate" asp-for="StartDate" disabled="disabled" value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_21" />
                 </div>
             </li>
             <li class="form-line" data-type="control_textbox" id="id_22">
                 <label class="form-label form-label-top form-label-auto" id="label_22" for="input_22"> End Date </label>
                 <div id="cid_22" class="form-input-wide" data-layout="half">
-                    <input type="datetime-local" id="endDate" asp-for="EndDate" value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_22" />
+                    <input type="datetime-local" id="endDate" asp-for="EndDate" disabled="disabled" value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_22" />
                 </div>
                 <p class="form-label form-label-top form-label-auto text-danger" id="warning-Date" style="margin-top: 12px;">End date must be greater than Start date</p>
             </li>
             <li class="form-line" data-type="control_textarea" id="id_20">
                 <label class="form-label form-label-top form-label-auto" id="label_20" for="input_20"> Remark </label>
                 <div id="cid_20" class="form-input-wide" data-layout="full">
-                    <textarea id="input_20" class="form-textarea ckeditor" asp-for="Remark" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_20"></textarea>
+                    <textarea id="input_20" class="form-textarea ckeditor" asp-for="Remark" disabled="disabled" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_20"></textarea>
                 </div>
             </li>
             <li class="form-line" data-type="control_button" id="id_2">
                 <div id="cid_2" class="form-input-wide" data-layout="full">
                     <div data-align="auto" class="form-buttons-wrapper form-buttons-auto   jsTest-button-wrapperField">
-                        <button id="btnSubmit" type="submit" class="form-submit-button submit-button jf-form-buttons jsTest-submitField" data-component="button" data-content="">
+                        <button id="btnSubmit" type="submit" disabled="disabled" class="form-submit-button submit-button jf-form-buttons jsTest-submitField" data-component="button" data-content="">
                             Submit
                         </button>
                     </div>
