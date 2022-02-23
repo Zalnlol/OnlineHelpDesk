@@ -29,26 +29,37 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
+
+            
             return View();
         }
 
-        public IActionResult FacilityList(String data)
+        public IActionResult FacilityList(string ? data)
         {
+           
             var facilityList = _context.Facility.ToList();
+
+            var facategory = _context.FacilityCategory.ToList();
+            ViewBag.facategory = facategory;
             List<String> facilityName = new List<String>();
-            for (int i = 0; i < facilityList.Count; i++)
+
+            
+
+            for (int i = 0; i < facategory.Count; i++)
             {
-                facilityName.Add(facilityList[i].FacilityName);
+                facilityName.Add(facategory[i].CategoryName);
             }
             TempData["facilities"] = facilityName;
             ViewBag.data = data;
-            if (String.IsNullOrEmpty(data))
+            if (data==null)
             {
                 return View(facilityList);
             }
             else
             {
-                facilityList = _context.Facility.ToList().FindAll(f => f.FacilityName.Equals(data));
+                var idd = _context.FacilityCategory.SingleOrDefault(t => t.CategoryName.Equals(data)).FacilityCategoryId;
+
+                facilityList = _context.Facility.Where(f => f.FacilityCategoryId.Equals(idd)).ToList();
                 return View(facilityList);
             }
         }
@@ -67,6 +78,7 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    newFacility.Image = "image/ImageSystem/roomdefualt.png";
                     _context.Facility.Add(newFacility);
                     _context.SaveChanges();
                     return RedirectToAction("FacilityList");
@@ -94,33 +106,29 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(Facility updateFacility, IFormFile file)
         {
-            ViewBag.data = new SelectList(_context.FacilityCategory.ToList(), "FacilityCategoryId", "CategoryName");
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    if (file.Length > 0)
+           
+          
+                    var ex = _context.Facility.Find(updateFacility.FacilityId);
+                    if (file != null)
                     {
-                        var ex = _context.Facility.Find(updateFacility.FacilityId);
+                       
                         var filePath = Path.Combine("wwwroot/image/ImageSystem", file.FileName);
                         var stream = new FileStream(filePath, FileMode.Create);
                         file.CopyToAsync(stream);
                         ex.Image = "image/ImageSystem/" + file.FileName;
-                        ex.FacilityName = updateFacility.FacilityName;
-                        ex.Description = updateFacility.Description;
-                        _context.SaveChanges();
-                        return RedirectToAction("FacilityList");
+
                     }
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError(string.Empty, e.Message);
-            }
+                   
+
+
+                    ex.FacilityName = updateFacility.FacilityName;
+                    ex.Description = updateFacility.Description;
+                    _context.SaveChanges();
+                    return RedirectToAction("FacilityList");
+                
+            
+            
+      
             return View();
         }
 

@@ -1,37 +1,35 @@
 ﻿@model OnlineHelpDesk.Areas.Admin.Models.RequestSample
 
 @{
-    ViewData["Title"] = "Create Request Sample";
+    ViewData["Title"] = "Edit Request Sample";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
-<h4>Request Sample</h4>
+<h4>RequestSample</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FacilityCategoryId" class="control-label"></label>
-                <select asp-for="FacilityCategoryId" class="form-control" asp-items="ViewBag.data">
-                    <option>---Selected---</option>
-                </select>
-            </div>
+            <input type="hidden" asp-for="RequestSampleId" />
+            <input type="text" asp-for="FacilityCategoryId" value="@ViewBag.facategoryid" hidden />
+
+
             <div class="form-group">
                 <label asp-for="Content" class="control-label"></label>
                 <input asp-for="Content" class="form-control" />
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="RequestSampleList">Back to List</a>
+    <a asp-action="samplelist">Back to List</a>
 </div>
 
 @section Scripts {

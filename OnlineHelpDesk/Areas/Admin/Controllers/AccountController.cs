@@ -98,9 +98,15 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             if (roles !="1" || roles !="2")
             {
                 var user = db.Users.SingleOrDefaultAsync(t => t.Id.Equals(Id)).Result;
-                user.FacilityId = int.Parse(Facility);
 
-                db.SaveChanges();
+                if (Facility !=null && roles=="4")
+                {
+                    user.FacilityId = int.Parse(Facility);
+
+                    db.SaveChanges();
+                }
+
+               
 
 
             }
@@ -267,7 +273,42 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
          
         }
 
-    
-        
+
+
+        public IActionResult delete(string id)
+        {
+
+            var userrole = db.UserRoles.SingleOrDefault(u => u.UserId.Equals(id));
+
+            if (userrole !=null)
+            {
+                db.UserRoles.Remove(userrole);
+                db.SaveChanges();
+            }
+
+           
+
+            var request = db.Request.SingleOrDefault(u => u.RequestorId.Equals(id));
+
+
+            if (request != null)
+            {
+                db.Request.Remove(request);
+                db.SaveChanges();
+            }
+
+
+          
+
+
+            var useri = db.Users.SingleOrDefault(u => u.Id.Equals(id));
+
+            db.Users.Remove(useri);
+            db.SaveChanges();
+
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
