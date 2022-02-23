@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using OnlineHelpDesk.Areas.Admin.Models;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace OnlineHelpDesk.Controllers
@@ -160,6 +161,7 @@ namespace OnlineHelpDesk.Controllers
 
         }
 
+        [Authorize(Roles = "Student,Receiver,Room Manager")]
         public IActionResult Roomlist()
         {
             if (_signInManager.IsSignedIn(User)==false)
@@ -191,6 +193,7 @@ namespace OnlineHelpDesk.Controllers
 
 
         }
+        [Authorize(Roles = "Receiver,Room Manager")]
 
         public IActionResult RoomProfile(string id)
         {
@@ -241,6 +244,7 @@ namespace OnlineHelpDesk.Controllers
             }
         }
 
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
         public IActionResult UserProfile(string ? id)
         {
@@ -277,6 +281,7 @@ namespace OnlineHelpDesk.Controllers
         }
 
 
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
         public IActionResult EditProfile()
         {
@@ -299,6 +304,8 @@ namespace OnlineHelpDesk.Controllers
             return View(registerUserModel);
 
         }
+
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
         [HttpPost]
         public IActionResult EditProfile(RegisterUserModel registerUserModel, IFormFile File)

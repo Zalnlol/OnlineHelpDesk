@@ -16,6 +16,7 @@ using OnlineHelpDesk.Areas.Admin.Models;
 namespace OnlineHelpDesk.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext db;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineHelpDesk.Models;
@@ -17,6 +18,9 @@ namespace OnlineHelpDesk.Controllers
         {
             this.db = _db;
         }
+
+
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
         public IActionResult Index(String startDate, String endDate, String _button)
         {
@@ -62,6 +66,8 @@ namespace OnlineHelpDesk.Controllers
             }
         }
 
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
+
         public IActionResult Details(int id)
         {
             Request req = db.Request.Find(id);
@@ -75,6 +81,7 @@ namespace OnlineHelpDesk.Controllers
                 return RedirectToAction("Details", "Report", new { _id = id });
             }
         }
+        [Authorize(Roles = "Receiver,Admin,Room Manager")]
 
         public IActionResult Authorize(int id)
         {
@@ -89,6 +96,7 @@ namespace OnlineHelpDesk.Controllers
                 return RedirectToAction("Authorize1", "Receiver", new { _id = id });
             }
         }
+        [Authorize(Roles = "Receiver,Admin,Room Manager")]
 
         [HttpPost]
         public async Task<IActionResult> Authorize(Request req, String authorize)
@@ -105,6 +113,7 @@ namespace OnlineHelpDesk.Controllers
                 return BadRequest(e.InnerException.Message);
             }
         }
+        [Authorize(Roles = "Receiver,Admin,Room Manager")]
 
         public IActionResult Authorize1(int _id)
         {
@@ -119,6 +128,7 @@ namespace OnlineHelpDesk.Controllers
                 return RedirectToAction("Authorize", "Receiver", new { id = _id });
             }
         }
+        [Authorize(Roles = "Receiver,Admin,Room Manager")]
 
         [HttpPost]
         public async Task<IActionResult> Authorize1(Request req, String authorize)

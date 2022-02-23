@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineHelpDesk.Models;
@@ -17,7 +18,7 @@ namespace OnlineHelpDesk.Controllers
         {
             this.db = _db;
         }
-
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
         public IActionResult Details(int _id)
         {
             Request req = db.Request.Find(_id);
@@ -25,11 +26,14 @@ namespace OnlineHelpDesk.Controllers
             return View(req);
         }
 
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
+
         public IActionResult Create()
         {
             ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
             return View();
         }
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Create(Request req)
@@ -57,6 +61,7 @@ namespace OnlineHelpDesk.Controllers
             }
             return View();
         }
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
         public IActionResult Edit(int _id)
         {
@@ -77,6 +82,8 @@ namespace OnlineHelpDesk.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
+
         public async Task<IActionResult> Edit(Request req)
         {
             try
@@ -99,6 +106,7 @@ namespace OnlineHelpDesk.Controllers
             }
             return View();
         }
+        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
         public IActionResult Edit1(int id)
         {
@@ -106,6 +114,7 @@ namespace OnlineHelpDesk.Controllers
             ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
             return View(req);
         }
+        [Authorize(Roles = "Receiver,Room Manager,Admin")]
 
         public IActionResult Approval(int _id)
         {
@@ -123,6 +132,7 @@ namespace OnlineHelpDesk.Controllers
             }
 
         }
+        [Authorize(Roles = "Receiver,Room Manager,Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Approval(Request req, String status)

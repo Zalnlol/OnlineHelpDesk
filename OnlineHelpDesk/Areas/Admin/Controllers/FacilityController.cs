@@ -1,16 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using OnlineHelpDesk.Areas.Admin.Models;
-using OnlineHelpDesk.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using OnlineHelpDesk.Data;
+using OnlineHelpDesk.Models;
+using OnlineHelpDesk.Areas.Admin.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace OnlineHelpDesk.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     //[Authorize(Roles="Admin")]
     public class FacilityController : Controller
     {
