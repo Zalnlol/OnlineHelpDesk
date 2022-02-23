@@ -33,7 +33,7 @@
     /* Injected CSS Code */
 </style>
 
-<form class="jotform-form" asp-action="Index" asp-controller="Request" method="post" enctype="multipart/form-data">
+<form class="jotform-form" asp-action="Authorize" method="post" enctype="multipart/form-data">
 
     <div role="main" class="form-all">
         <style>
@@ -80,11 +80,30 @@
                     <textarea id="input_20" class="form-textarea ckeditor" asp-for="Remark" disabled="disabled" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_20"></textarea>
                 </div>
             </li>
+            <li class="form-line" data-type="control_radio" id="id_24">
+                <label class="form-label form-label-top form-label-auto" id="label_24" for="input_24"> Authorize </label>
+                <div id="cid_24" class="form-input-wide" data-layout="full">
+                    <div class="form-single-column" role="group" aria-labelledby="label_24" data-component="radio">
+                        <span class="form-radio-item" style="clear:left">
+                            <span class="dragger-item">
+                            </span>
+                            <input type="radio" aria-describedby="label_24" class="form-radio" id="input_24_0" name="authorize" value="true" />
+                            <label id="label_input_24_0" for="input_24_0"> Agree </label>
+                        </span>
+                        <span class="form-radio-item" style="clear:left">
+                            <span class="dragger-item">
+                            </span>
+                            <input type="radio" aria-describedby="label_24" class="form-radio" id="input_24_1" name="authorize" value="false" />
+                            <label id="label_input_24_1" for="input_24_1"> Deny </label>
+                        </span>
+                    </div>
+                </div>
+            </li>
             <li class="form-line" data-type="control_button" id="id_2">
                 <div id="cid_2" class="form-input-wide" data-layout="full">
                     <div data-align="auto" class="form-buttons-wrapper form-buttons-auto   jsTest-button-wrapperField">
                         <button id="btnSubmit" type="submit" class="form-submit-button submit-button jf-form-buttons jsTest-submitField" data-component="button" data-content="">
-                            Back to List
+                            Submit
                         </button>
                     </div>
                 </div>

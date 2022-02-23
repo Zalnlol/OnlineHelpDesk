@@ -67,7 +67,15 @@ namespace OnlineHelpDesk.Controllers
         public IActionResult Details(int id)
         {
             Request req = db.Request.Find(id);
-            return View(req);
+            ViewBag.facilities = db.Facility.ToList();
+            if(req.Status == "Request" || req.Status == "Approved" || req.Status == "Unapproved")
+            {
+                return View(req);
+            }
+            else
+            {
+                return RedirectToAction("Details", "Report", new { _id = id });
+            }
         }
 
         public IActionResult Create()
@@ -84,13 +92,14 @@ namespace OnlineHelpDesk.Controllers
                 var request = Request.Form;
                 if (ModelState.IsValid)
                 {
-                    req.Status = "Waiting for approval";
+                    req.Status = "Request";
                     req.RequestorId = HttpContext.Session.GetString("userId");
                     req.FacilityId = int.Parse(request["FacilityId"]);
                     req.RequestTime = DateTime.Now;
                     req.StartDate = DateTime.Parse(request["StartDate"]);
                     req.EndDate = DateTime.Parse(request["EndDate"]);
                     req.Remark = request["Remark"];
+                    req.Authorize = false;
                     db.Request.Add(req);
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index");
@@ -107,7 +116,18 @@ namespace OnlineHelpDesk.Controllers
         {
             Request req = db.Request.Find(id);
             ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f => f.RentalStatus == true), "FacilityId", "FacilityName");
-            return View(req);
+            if (req.Status == "Request")
+            {
+                return View(req);
+            }
+            else if (req.Status == "Approved" || req.Status == "Unapproved")
+            {
+                return RedirectToAction("Edit1", "Request", new { id = id });
+            }
+            else
+            {
+                return RedirectToAction("Edit", "Report", new { _id = id });
+            }
         }
 
         [HttpPost]
@@ -117,21 +137,14 @@ namespace OnlineHelpDesk.Controllers
             {
                 req = db.Request.Find(req.RequestId);
                 var request = Request.Form;
-                if (req.Status == "Waiting for approval")
+                if (ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
-                    {
-                        req.FacilityId = int.Parse(request["FacilityId"]);
-                        req.StartDate = DateTime.Parse(request["StartDate"]);
-                        req.EndDate = DateTime.Parse(request["EndDate"]);
-                        req.Remark = request["Remark"];
-                        await db.SaveChangesAsync();
-                        return RedirectToAction("Index");
-                    }
-                }
-                else
-                {
-                    return RedirectToAction("Edit1", "Request", new { id = req.RequestId });
+                    req.FacilityId = int.Parse(request["FacilityId"]);
+                    req.StartDate = DateTime.Parse(request["StartDate"]);
+                    req.EndDate = DateTime.Parse(request["EndDate"]);
+                    req.Remark = request["Remark"];
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
             }
             catch (Exception e)
@@ -168,17 +181,16 @@ namespace OnlineHelpDesk.Controllers
         {
             Request req = db.Request.Find(id);
             ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f => f.RentalStatus == true), "FacilityId", "FacilityName");
-            if (req.Status == "Waiting for approval" || req.Status == "Approved" || req.Status == "Unapproved")
+            if (req.Status == "Request" || req.Status == "Approved" || req.Status == "Unapproved")
             {
                 ViewBag.Approved = "Approved";
                 ViewBag.Unapproved = "Unapproved";
+                return View(req);
             }
             else
             {
-                ViewBag.Approved = "Resolved";
-                ViewBag.Unapproved = "Unresolved";
+                return RedirectToAction("Approval", "Report", new { _id = id });
             }
-            return View(req);
         }
 
         [HttpPost]
@@ -194,15 +206,12 @@ namespace OnlineHelpDesk.Controllers
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
-                else
-                {
-                    return RedirectToAction("Edit1", "Request", new { id = req.RequestId });
-                }
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
+            return View();
         }
 
        

@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Request</h4>
+    <h4>Report</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -18,10 +18,9 @@
             {
                 if(item.FacilityId == Model.FacilityId)
                 {
-                    <p>@item.FacilityName</p>
+                <p>@item.FacilityName</p>
                 }
             }
-
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.RequestTime)
@@ -33,28 +32,16 @@
             @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class="col-sm-10">
-            @if (Model.Status == "Request")
+            @if (Model.Status == "Report")
             {
 
 
-                <p class="text-danger">Waiting for approval</p>
+            <p class="text-danger">Waiting for approval</p>
             }
             else
             {
-                <p class="text-primary">@Model.Status</p>
+            <p class="text-primary">@Model.Status</p>
             }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Remark)
@@ -65,5 +52,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-controller="Request">Back to List</a>
 </div>

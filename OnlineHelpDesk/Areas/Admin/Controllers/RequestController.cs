@@ -22,8 +22,8 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
 
         public IActionResult Index(String startDate, String endDate, String _button)
         {
-            List<Request> model = db.Request.Where(m=>m.Status == "Waiting for approval" ||
-                                                      m.Status == "Unresolved").ToList();
+            List<Request> model = db.Request.Where(m=>m.Status == "Request" ||
+                                                      m.Status == "Report").ToList();
             ViewBag.facilities = db.Facility.ToList();
             if (String.IsNullOrEmpty(startDate) && String.IsNullOrEmpty(endDate) || _button == "Reset")
             {
@@ -63,8 +63,8 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
 
         public IActionResult Index1(String startDate, String endDate, String _button)
         {
-            List<Request> model = db.Request.Where(m => m.Status != "Waiting for approval" &&
-                                                        m.Status != "Unresolved").ToList();
+            List<Request> model = db.Request.Where(m => m.Status != "Request" &&
+                                                        m.Status != "Report").ToList();
             ViewBag.facilities = db.Facility.ToList();
             if (String.IsNullOrEmpty(startDate) && String.IsNullOrEmpty(endDate) || _button == "Reset")
             {
