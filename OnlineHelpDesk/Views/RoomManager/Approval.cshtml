@@ -16,7 +16,7 @@
         JotForm.setCustomHint('input_20', 'Type here...');
         /*INIT-END*/
     });
-   
+
 </script>
 @*<style type="text/css">@media print{.form-section{display:inline!important}.form-pagebreak{display:none!important}.form-section-closed{height:auto!important}.page-section{position:initial!important}}</style>*@
 <link type="text/css" rel="stylesheet" href="https://cdn01.jotfor.ms/themes/CSS/5e6b428acc8c4e222d1beb91.css?themeRevisionID=5eb3b4ae85bd2e1e2966db96" />
@@ -33,7 +33,7 @@
     /* Injected CSS Code */
 </style>
 
-<form class="jotform-form" asp-action="Create" method="post" enctype="multipart/form-data">
+<form class="jotform-form" asp-action="Approval" method="post" enctype="multipart/form-data">
 
     <div role="main" class="form-all">
         <style>
@@ -48,15 +48,15 @@
                         <h1 id="header_1" class="form-header" data-component="header">
                             Request Form
                         </h1>
-                        <p class="text-danger">@ViewBag.msg</p>
                     </div>
                 </div>
+                <input type="hidden" asp-for="RequestId" />
             </li>
 
             <li class="form-line" data-type="control_textbox" id="id_21">
                 <label class="form-label form-label-top form-label-auto" id="label_22" for="input_22"> Facility </label>
                 <div id="cid_21" class="form-input-wide" data-layout="half">
-                    @foreach (var item in ViewBag.facility)
+                    @foreach (var item in ViewBag.facilities)
                     {
                         if (item.FacilityId == ViewBag.facilityId)
                         {
@@ -67,22 +67,41 @@
             </li>
 
             <li class="form-line" data-type="control_textbox" id="id_21">
-                <label class="form-label form-label-top form-label-auto" id="label_22" for="input_22"> Start Date </label>
+                <label class="form-label form-label-top form-label-auto" id="label_21" for="input_21"> Start Date </label>
                 <div id="cid_21" class="form-input-wide" data-layout="half">
-                    <input type="datetime-local" id="startDate" asp-for="StartDate" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" value="" data-component="textbox" aria-labelledby="label_21" />
+                    <input type="datetime-local" id="startDate" asp-for="StartDate" disabled="disabled" value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_21" />
                 </div>
             </li>
             <li class="form-line" data-type="control_textbox" id="id_22">
                 <label class="form-label form-label-top form-label-auto" id="label_22" for="input_22"> End Date </label>
                 <div id="cid_22" class="form-input-wide" data-layout="half">
-                    <input type="datetime-local" id="endDate" asp-for="EndDate" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" value="" data-component="textbox" aria-labelledby="label_22" />
+                    <input type="datetime-local" id="endDate" asp-for="EndDate" disabled="disabled" value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_22" />
                 </div>
                 <p class="form-label form-label-top form-label-auto text-danger" id="warning-Date" style="margin-top: 12px;">End date must be greater than Start date</p>
             </li>
             <li class="form-line" data-type="control_textarea" id="id_20">
                 <label class="form-label form-label-top form-label-auto" id="label_20" for="input_20"> Remark </label>
                 <div id="cid_20" class="form-input-wide" data-layout="full">
-                    <textarea id="input_20" class="form-textarea ckeditor" asp-for="Remark" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_20"></textarea>
+                    <textarea id="input_20" class="form-textarea ckeditor" asp-for="Remark" disabled="disabled" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_20"></textarea>
+                </div>
+            </li>
+            <li class="form-line" data-type="control_radio" id="id_24">
+                <label class="form-label form-label-top form-label-auto" id="label_24" for="input_24"> Authorize </label>
+                <div id="cid_24" class="form-input-wide" data-layout="full">
+                    <div class="form-single-column" role="group" aria-labelledby="label_24" data-component="radio">
+                        <span class="form-radio-item" style="clear:left">
+                            <span class="dragger-item">
+                            </span>
+                            <input type="radio" aria-describedby="label_24" class="form-radio" id="input_24_0" name="status" value="Approved" />
+                            <label id="label_input_24_0" for="input_24_0"> Agree </label>
+                        </span>
+                        <span class="form-radio-item" style="clear:left">
+                            <span class="dragger-item">
+                            </span>
+                            <input type="radio" aria-describedby="label_24" class="form-radio" id="input_24_1" name="status" value="Unapproved" />
+                            <label id="label_input_24_1" for="input_24_1"> Deny </label>
+                        </span>
+                    </div>
                 </div>
             </li>
             <li class="form-line" data-type="control_button" id="id_2">

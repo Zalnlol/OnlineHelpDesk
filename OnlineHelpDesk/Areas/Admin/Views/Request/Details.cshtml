@@ -20,8 +20,34 @@
             @Html.DisplayNameFor(model => model.FacilityId)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FacilityId)
+            @foreach (var item in ViewBag.facilities)
+            {
+                if (item.FacilityId == Model.FacilityId)
+                {
+                    @item.FacilityName
+                }
+            }
         </dd>
+        @if (ViewBag.requestSamples == null)
+        {
+
+        }
+        else
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.RequestSampleId)
+            </dt>
+            <dd class="col-sm-10">
+                @foreach (var item in ViewBag.requestSamples)
+                {
+                    if (item.RequestSampleId == Model.RequestSampleId)
+                    {
+                        @item.Content
+                    }
+                }
+            </dd>
+
+        }
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.RequestTime)
         </dt>

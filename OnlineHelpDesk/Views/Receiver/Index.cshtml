@@ -7,6 +7,8 @@
 
 <h1>Request List</h1>
 
+<p class="text-primary">@ViewBag.msg</p>
+
 <div style="margin: 14px">
     <form asp-action="Index">
         @if (ViewBag.startDate == "" && ViewBag.endDate == "")
@@ -41,6 +43,9 @@
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Authorize)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Remark)
             </th>
             <th></th>
@@ -67,19 +72,31 @@
                     {
                         <p class="text-danger">Waiting for approval</p>
                     }
+                    else if (item.Status == "Unapproved" || item.Status == "Unresolved")
+                    {
+                        <p class="text-danger">@item.Status</p>
+                    }
                     else
                     {
                         <p class="text-primary">@item.Status</p>
                     }
                 </td>
-
+                <td>
+                    @if (item.Authorize == true)
+                    {
+                        <p class="text-primary">Authorized</p>
+                    }
+                    else
+                    {
+                        <p class="text-danger">Denied</p>
+                    }
+                </td>
                 <td>
                     @Html.Raw(item.Remark)
                 </td>
                 <td>
                     <a asp-action="Authorize" asp-route-id="@item.RequestId">Authorize</a> &nbsp;
                     <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
-                    <a asp-action="Delete" asp-route-id="@item.RequestId">Delete</a>
                 </td>
             </tr>
         }

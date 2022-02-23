@@ -50,27 +50,41 @@
                         </h1>
                     </div>
                 </div>
-                <input type="hidden" asp-for="RequestId" />
+            </li>
+            <input type="hidden" asp-for="@Model.RequestId" value="@Model.RequestId"/>
+            <li class="form-line" data-type="control_textbox" id="id_21">
+                <label class="form-label form-label-top form-label-auto" id="label_22" for="input_22"> Facility </label>
+                <div id="cid_21" class="form-input-wide" data-layout="half">
+                    @foreach (var item in ViewBag.facility)
+                    {
+                        if (item.FacilityId == ViewBag.facilityId)
+                        {
+                            <input type="text" id="" name="" disabled="disabled" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" value="@item.FacilityName" data-component="textbox" aria-labelledby="label_21" />
+                        }
+                    }
+                </div>
             </li>
 
             <li class="form-line form-line-column form-col-1" data-type="control_dropdown" id="id_16">
-                <label class="form-label form-label-top" id="label_16" for="input_16"> FacilityId </label>
+                <label class="form-label form-label-top" id="label_16" for="input_16"> Request Sample </label>
                 <div id="cid_16" class="form-input-wide" data-layout="half">
-                    <select class="form-dropdown" id="input_16" asp-for="FacilityId" style="width:150px" data-component="dropdown" asp-items="ViewBag.facilityList">
+                    <select class="form-dropdown" id="" asp-for="RequestSampleId" style="width:150px" data-component="dropdown" asp-items="ViewBag.requestSample">
                         <option>--Selected--</option>
                     </select>
                 </div>
             </li>
+
             <li class="form-line" data-type="control_textbox" id="id_21">
                 <div id="cid_21" class="form-input-wide" data-layout="half">
-                    <input type="datetime-local" id="startDate" asp-for="StartDate" hidden="hidden" value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_21" />
+                    <input type="datetime-local" hidden="hidden" id="startDate" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_21" />
                 </div>
             </li>
             <li class="form-line" data-type="control_textbox" id="id_22">
+
                 <div id="cid_22" class="form-input-wide" data-layout="half">
-                    <input type="datetime-local" id="endDate" asp-for="EndDate" hidden="hidden" value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" onchange="checkDate()" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_22" />
+                    <input type="datetime-local" hidden="hidden" id="endDate" asp-for="EndDate" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_22" />
                 </div>
-                <p class="form-label form-label-top form-label-auto text-danger" id="warning-Date" style="margin-top: 12px;">End date must be greater than Start date</p>
+
             </li>
             <li class="form-line" data-type="control_textarea" id="id_20">
                 <label class="form-label form-label-top form-label-auto" id="label_20" for="input_20"> Remark </label>
@@ -90,24 +104,4 @@
         </ul>
     </div>
     <script src="~/ckeditor/ckeditor.js"></script>
-    <script>
-        var divWarningDate = document.getElementById('warning-Date');
-        divWarningDate.style.display = "none";
-        var btnSubmit = document.getElementById('btnSubmit');
-
-        function checkDate() {
-            var startDate = document.getElementById('startDate').value;
-            var endDate = document.getElementById('endDate').value;
-
-            if (endDate < startDate) {
-                divWarningDate.style.display = "block";
-                btnSubmit.disabled = true;
-            } else {
-                divWarningDate.style.display = "none";
-                btnSubmit.disabled = false;
-            }
-        }
-
-    </script>
-
 </form>

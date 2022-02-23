@@ -78,24 +78,47 @@ namespace OnlineHelpDesk.Controllers
             }
         }
 
-        public IActionResult Create()
-        {            
-            ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f=>f.RentalStatus == true), "FacilityId", "FacilityName");
+        public IActionResult Create(int id)
+        {
+            ViewBag.requestSample = new SelectList(db.RequestSample.ToList(), "RequestSampleId", "Content");
+            ViewBag.facility = db.Facility.ToList();
+            ViewBag.facilityId = db.Facility.Find(id).FacilityId;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Request req)
+        public async Task<IActionResult> Create(Request req, int id)
         {
             try
-            {              
+            {
+                List<Request> requestList = db.Request.ToList();
+                ViewBag.facilityId = db.Facility.Find(id).FacilityId;
                 var request = Request.Form;
+                List<RequestSample> requestSample = db.RequestSample.ToList();
                 if (ModelState.IsValid)
                 {
                     req.Status = "Request";
                     req.RequestorId = HttpContext.Session.GetString("userId");
-                    req.FacilityId = int.Parse(request["FacilityId"]);
+                    req.FacilityId = ViewBag.facilityId;
+                    foreach (var item in requestSample)
+                    {
+                        req.RequestSampleId = item.RequestSampleId;
+                    }
                     req.RequestTime = DateTime.Now;
+                    foreach (var item in requestList)
+                    {
+                        if(item.FacilityId == id)
+                        {
+                            if (DateTime.Parse(request["StartDate"]) >= item.StartDate && DateTime.Parse(request["EndDate"]) <= item.EndDate)
+                            {
+                                ViewBag.requestSample = new SelectList(db.RequestSample.ToList(), "RequestSampleId", "Content");
+                                ViewBag.facility = db.Facility.ToList();
+                                ViewBag.facilityId = db.Facility.Find(id).FacilityId;
+                                ViewBag.msg = "This time is taken. Try another!";
+                                return View();
+                            }
+                        }
+                    }
                     req.StartDate = DateTime.Parse(request["StartDate"]);
                     req.EndDate = DateTime.Parse(request["EndDate"]);
                     req.Remark = request["Remark"];
@@ -115,7 +138,8 @@ namespace OnlineHelpDesk.Controllers
         public IActionResult Edit(int id)
         {
             Request req = db.Request.Find(id);
-            ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f => f.RentalStatus == true), "FacilityId", "FacilityName");
+            ViewBag.facility = db.Facility.ToList();
+            ViewBag.facilityId = req.FacilityId;
             if (req.Status == "Request")
             {
                 return View(req);
@@ -133,31 +157,27 @@ namespace OnlineHelpDesk.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Request req)
         {
+            var request = Request.Form;
+            req = db.Request.Find(req.RequestId);
             try
-            {
-                req = db.Request.Find(req.RequestId);
-                var request = Request.Form;
-                if (ModelState.IsValid)
-                {
-                    req.FacilityId = int.Parse(request["FacilityId"]);
-                    req.StartDate = DateTime.Parse(request["StartDate"]);
-                    req.EndDate = DateTime.Parse(request["EndDate"]);
-                    req.Remark = request["Remark"];
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
+            {    
+                req.StartDate = DateTime.Parse(request["StartDate"]);
+                req.EndDate = DateTime.Parse(request["EndDate"]);
+                req.Remark = request["Remark"];
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
             }
             catch (Exception e)
             {
                 return BadRequest(e.InnerException.Message);
             }
-            return View();
         }
 
         public IActionResult Edit1(int id)
         {
             Request req = db.Request.Find(id);
-            ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f => f.RentalStatus == true), "FacilityId", "FacilityName");
+            ViewBag.facility = db.Facility.ToList();
+            ViewBag.facilityId = db.Facility.Find(id).FacilityId;
             return View(req);
         }
 
@@ -177,42 +197,7 @@ namespace OnlineHelpDesk.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Approval(int id)
-        {
-            Request req = db.Request.Find(id);
-            ViewBag.facilityList = new SelectList(db.Facility.ToList().FindAll(f => f.RentalStatus == true), "FacilityId", "FacilityName");
-            if (req.Status == "Request" || req.Status == "Approved" || req.Status == "Unapproved")
-            {
-                ViewBag.Approved = "Approved";
-                ViewBag.Unapproved = "Unapproved";
-                return View(req);
-            }
-            else
-            {
-                return RedirectToAction("Approval", "Report", new { _id = id });
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Approval(Request req, String status)
-        {
-            try
-            {
-                req = db.Request.Find(req.RequestId);           
-                if (HttpContext.Session.GetString("Role") == "4")
-                {
-
-                    req.Status = status;
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-            return View();
-        }
+       
 
        
     }

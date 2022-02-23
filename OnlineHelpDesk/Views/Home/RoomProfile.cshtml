@@ -105,12 +105,8 @@
                         <p class="m-0px font-w-600">Send Report</p>
                         <br />
                         <a href="#">
-                            <button class="btn btn-outline-info">Send Report</button>
-
-
+                            <a asp-action="Create" asp-controller="Report" asp-route-id="@Model.FacilityId" class="btn btn-outline-info">Send Report</a>
                         </a>
-
-
                     </div>
                 </div>
 
@@ -121,7 +117,7 @@
                             <p class="m-0px font-w-600">Rental Room</p>
                             <br />
                             <a href="#">
-                                <button class="btn btn-outline-success">Rental Room</button>
+                                <a asp-action="Create" asp-controller="Request" asp-route-id="@Model.FacilityId" class="btn btn-outline-success">Rental Room</a>
                             </a>
                         </div>
                     </div>

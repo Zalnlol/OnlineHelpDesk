@@ -18,38 +18,45 @@ namespace OnlineHelpDesk.Controllers
         {
             this.db = _db;
         }
+
         [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
         public IActionResult Details(int _id)
         {
             Request req = db.Request.Find(_id);
             ViewBag.facilities = db.Facility.ToList();
+            ViewBag.requestSamples = db.RequestSample.ToList();
             return View(req);
         }
 
         [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
+            ViewBag.requestSample = new SelectList(db.RequestSample.ToList(), "RequestSampleId", "Content");
+            ViewBag.facility = db.Facility.ToList();
+            ViewBag.facilityId = db.Facility.Find(id).FacilityId;
             return View();
         }
         [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
         [HttpPost]
-        public async Task<IActionResult> Create(Request req)
+        public async Task<IActionResult> Create(Request req, int id)
         {
             try
             {
+                ViewBag.facilityId = db.Facility.Find(id).FacilityId;
                 var request = Request.Form;
                 if (ModelState.IsValid)
                 {
                     req.Status = "Report";
                     req.RequestorId = HttpContext.Session.GetString("userId");
-                    req.FacilityId = int.Parse(request["FacilityId"]);
+                    req.FacilityId = ViewBag.facilityId;
+                    req.RequestSampleId = int.Parse(request["RequestSampleId"]);
                     req.RequestTime = DateTime.Now;
                     req.StartDate = DateTime.Parse(request["StartDate"]);
                     req.EndDate = DateTime.Parse(request["EndDate"]);
                     req.Remark = request["Remark"];
+                    req.Authorize = false;
                     db.Request.Add(req);
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index", "Request");
@@ -66,7 +73,9 @@ namespace OnlineHelpDesk.Controllers
         public IActionResult Edit(int _id)
         {
             Request req = db.Request.Find(_id);
-            ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
+            ViewBag.requestSample = new SelectList(db.RequestSample.ToList(), "RequestSampleId", "Content");
+            ViewBag.facility = db.Facility.ToList();
+            ViewBag.facilityId = req.FacilityId;
             if (req.Status == "Report")
             {
                 return View(req);
@@ -92,7 +101,7 @@ namespace OnlineHelpDesk.Controllers
                 var request = Request.Form;
                 if (ModelState.IsValid)
                 {
-                    req.FacilityId = int.Parse(request["FacilityId"]);
+                    req.RequestSampleId = int.Parse(request["RequestSampleId"]);
                     req.StartDate = DateTime.Parse(request["StartDate"]);
                     req.EndDate = DateTime.Parse(request["EndDate"]);
                     req.Remark = request["Remark"];
@@ -111,7 +120,9 @@ namespace OnlineHelpDesk.Controllers
         public IActionResult Edit1(int id)
         {
             Request req = db.Request.Find(id);
-            ViewBag.facilityList = new SelectList(db.Facility.ToList(), "FacilityId", "FacilityName");
+            ViewBag.requestSample = new SelectList(db.RequestSample.ToList(), "RequestSampleId", "Content");
+            ViewBag.facility = db.Facility.ToList();
+            ViewBag.facilityId = req.FacilityId;
             return View(req);
         }
         [Authorize(Roles = "Receiver,Room Manager,Admin")]

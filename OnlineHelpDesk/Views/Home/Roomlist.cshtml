@@ -43,11 +43,11 @@
                 <p style="text-align:justify">@item.Description </p>
                 <br />
 
-                <a asp-action="Create" asp-controller="Report" id="card">Send Report </a>
+                <a asp-action="Create" asp-controller="Report" asp-route-id="@item.FacilityId" id="card">Send Report </a>
 
                 @if (item.RentalStatus == true)
                 {
-                      <a asp-action="Create" asp-controller="Request" id="card" style="color: #1dc5bb">Rental Room </a>
+                      <a asp-action="Create" asp-controller="Request" asp-route-id="@item.FacilityId" id="card" style="color: #1dc5bb">Rental Room </a>
                 }
 
             </div>

@@ -111,7 +111,17 @@ namespace OnlineHelpDesk.Areas.Admin.Controllers
             var model = db.Request.Single(r => r.RequestId == id);
             ApplicationUser user = db.Users.SingleOrDefault(u => u.Id == model.RequestorId);
             ViewBag.userFullName = user.FullName;
-            return View(model);
+            ViewBag.facilities = db.Facility.ToList();
+            ViewBag.requestSamples = null;
+            if (model.Status == "Request" || model.Status == "Approved" || model.Status == "Unapproved")
+            {
+                return View(model);
+            }
+            else
+            {
+                ViewBag.requestSamples = db.RequestSample.ToList();
+                return View(model);
+            }
         }
 
     }

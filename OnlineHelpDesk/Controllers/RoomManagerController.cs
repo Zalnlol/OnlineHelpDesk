@@ -5,17 +5,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineHelpDesk.Data;
 using OnlineHelpDesk.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineHelpDesk.Controllers
 {
-    public class ReceiverController : Controller
+    public class RoomManagerController : Controller
     {
         private readonly Data.ApplicationDbContext db;
 
-        public ReceiverController(Data.ApplicationDbContext _db)
+        public RoomManagerController(Data.ApplicationDbContext _db)
         {
             this.db = _db;
         }
@@ -25,7 +24,10 @@ namespace OnlineHelpDesk.Controllers
 
         public IActionResult Index(String startDate, String endDate, String _button)
         {
-            var model = db.Request.ToList();
+            String userId = HttpContext.Session.GetString("userId");
+            int facilityIdManager = db.Users.SingleOrDefault(u => u.Id == userId).FacilityId;
+            var model = db.Request.ToList().FindAll(m=>m.FacilityId == facilityIdManager);
+            
             if (HttpContext.Session.GetString("Role") == "2")
             {
                 model = db.Request.ToList().FindAll(r => r.RequestorId == HttpContext.Session.GetString("userId"));
@@ -86,92 +88,76 @@ namespace OnlineHelpDesk.Controllers
                 return View(model);
             }
         }
-        [Authorize(Roles = "Receiver,Admin,Room Manager")]
 
-        public IActionResult Authorize(int id)
+        public IActionResult Approval(int id)
         {
             Request req = db.Request.Find(id);
-            ViewBag.facilityId = req.FacilityId;
             ViewBag.facilities = db.Facility.ToList();
+            ViewBag.facilityId = db.Facility.Find(id).FacilityId;
             if (req.Status == "Request" || req.Status == "Approved" || req.Status == "Unapproved")
             {
                 return View(req);
             }
             else
             {
-                return RedirectToAction("Authorize1", "Receiver", new { _id = id });
+                return RedirectToAction("Approval1", "RoomManager", new { _id = id });
             }
         }
-        [Authorize(Roles = "Receiver,Admin,Room Manager")]
 
         [HttpPost]
-        public async Task<IActionResult> Authorize(Request req, String authorize)
+        public async Task<IActionResult> Approval(Request req, String status)
         {
             try
             {
                 req = db.Request.Find(req.RequestId);
-                if(Boolean.Parse(authorize) == true)
+                if (HttpContext.Session.GetString("Role") == "4")
                 {
-                    req.Status = "Request";
-                    req.Authorize = true;
+                    req.Status = status;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
-                else
-                {
-                    req.Status = "Unapproved";
-                    req.Authorize = false;
-                }
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
             }
             catch (Exception e)
             {
-                return BadRequest(e.InnerException.Message);
+                return BadRequest(e.Message);
             }
+            return View();
         }
-        [Authorize(Roles = "Receiver,Admin,Room Manager")]
 
-        public IActionResult Authorize1(int _id)
+        public IActionResult Approval1(int _id)
         {
             Request req = db.Request.Find(_id);
             ViewBag.requestSample = new SelectList(db.RequestSample.ToList(), "RequestSampleId", "Content");
             ViewBag.facility = db.Facility.ToList();
-            ViewBag.facilityId = req.FacilityId;
-
-            if (req.Status == "Report" || req.Status == "Resolved" || req.Status == "Unresolved")
+            ViewBag.facilityId = db.Facility.Find(_id).FacilityId;
+            if (req.Status == "Request" || req.Status == "Approved" || req.Status == "Unapproved")
             {
-                return View(req);
+                return RedirectToAction("Approval", "RoomManager", new { id = _id });
             }
             else
             {
-                return RedirectToAction("Authorize", "Receiver", new { id = _id });
+                return View(req);
             }
         }
-        [Authorize(Roles = "Receiver,Admin,Room Manager")]
 
         [HttpPost]
-        public async Task<IActionResult> Authorize1(Request req, String authorize)
+        public async Task<IActionResult> Approval1(Request req, String status)
         {
             try
             {
                 req = db.Request.Find(req.RequestId);
-                if(Boolean.Parse(authorize) == true)
+                if (HttpContext.Session.GetString("Role") == "4")
                 {
-                    req.Status = "Report";
-                    req.Authorize = true;
+                    req.Status = status;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
-                else
-                {
-                    req.Status = "Unresolved";
-                    req.Authorize = false;
-                }
-
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
             }
             catch (Exception e)
             {
-                return BadRequest(e.InnerException.Message);
+                return BadRequest(e.Message);
             }
+            return View();
         }
     }
 }

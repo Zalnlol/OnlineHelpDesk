@@ -53,14 +53,19 @@
                 <input type="hidden" asp-for="RequestId" />
             </li>
 
-            <li class="form-line form-line-column form-col-1" data-type="control_dropdown" id="id_16">
-                <label class="form-label form-label-top" id="label_16" for="input_16"> FacilityId </label>
-                <div id="cid_16" class="form-input-wide" data-layout="half">
-                    <select class="form-dropdown" id="input_16" asp-for="FacilityId" disabled="disabled" style="width:150px" data-component="dropdown" asp-items="ViewBag.facilityList">
-                        <option>--Selected--</option>
-                    </select>
+            <li class="form-line" data-type="control_textbox" id="id_21">
+                <label class="form-label form-label-top form-label-auto" id="label_22" for="input_22"> Facility </label>
+                <div id="cid_21" class="form-input-wide" data-layout="half">
+                    @foreach (var item in ViewBag.facilities)
+                    {
+                        if (item.FacilityId == ViewBag.facilityId)
+                        {
+                            <input type="text" id="" name="" disabled="disabled" data-type="input-textbox" class="form-textbox" data-defaultvalue="" style="width:310px" size="310" value="@item.FacilityName" data-component="textbox" aria-labelledby="label_21" />
+                        }
+                    }
                 </div>
             </li>
+
             <li class="form-line" data-type="control_textbox" id="id_21">
                 <label class="form-label form-label-top form-label-auto" id="label_21" for="input_21"> Start Date </label>
                 <div id="cid_21" class="form-input-wide" data-layout="half">
