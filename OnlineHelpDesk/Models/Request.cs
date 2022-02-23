@@ -38,5 +38,7 @@ namespace OnlineHelpDesk.Models
         public String Remark { get; set; }
 
         public bool Authorize { get; set; }
+
+        public String Feedback { get; set; }
     }
 }

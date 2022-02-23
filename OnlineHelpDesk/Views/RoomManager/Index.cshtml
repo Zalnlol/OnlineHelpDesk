@@ -95,8 +95,25 @@
                     @Html.Raw(item.Remark)
                 </td>
                 <td>
-                    <a asp-action="Approval" asp-route-id="@item.RequestId">Approval</a> &nbsp;
-                    <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
+
+                    @if (item.Status != "Resolved")
+                    {
+
+                        @if (item.Status != "Report")
+                        {
+                            <a asp-action="Approval" asp-route-id="@item.RequestId">Approval</a>
+                        }
+
+                        <span>&nbsp;</span>
+                        <a asp-action="Details" asp-route-id="@item.RequestId">Feedback</a><span>&nbsp;</span>
+
+                    }
+                    else
+                    {
+                        <a asp-action="Details" asp-route-id="@item.RequestId">Details</a><span>&nbsp;</span>
+                    }
+
+
                 </td>
             </tr>
         }

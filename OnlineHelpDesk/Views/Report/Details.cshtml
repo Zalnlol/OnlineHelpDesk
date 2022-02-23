@@ -61,6 +61,33 @@
         <dd class="col-sm-10">
             @Html.Raw(Model.Remark)
         </dd>
+
+
+
+        @if (Model.Status == "Report")
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Feedback)
+            </dt>
+            if (Model.Feedback == null)
+            {
+                <dd class="col-sm-10 text-danger">
+                    No response yet
+                </dd>
+            }
+        }
+        else
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Feedback)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.Raw(Model.Feedback)
+            </dd>
+        }
+
+
+
     </dl>
 </div>
 <div>

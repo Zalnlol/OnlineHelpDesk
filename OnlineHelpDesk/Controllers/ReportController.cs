@@ -165,5 +165,22 @@ namespace OnlineHelpDesk.Controllers
             }
             return View();
         }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Feedback(string RequestId, string Feedback)
+        {
+
+            var ds = db.Request.SingleOrDefault(t => t.RequestId == int.Parse(RequestId));
+
+            ds.Feedback = Feedback;
+            ds.Status = "Resolved";
+            db.SaveChanges();
+
+
+
+            return RedirectToAction( "Index", "RoomManager");
+        }
     }
 }

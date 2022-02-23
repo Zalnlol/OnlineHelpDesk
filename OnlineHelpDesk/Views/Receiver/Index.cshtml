@@ -82,7 +82,7 @@
                     }
                 </td>
                 <td>
-                    @if (item.Authorize == true)
+                    @if (item.Authorize == true )
                     {
                         <p class="text-primary">Authorized</p>
                     }
@@ -95,7 +95,11 @@
                     @Html.Raw(item.Remark)
                 </td>
                 <td>
-                    <a asp-action="Authorize" asp-route-id="@item.RequestId">Authorize</a> &nbsp;
+                   
+                        <a asp-action="Authorize" asp-route-id="@item.RequestId">Authorize</a>
+                  
+
+                    &nbsp;
                     <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
                 </td>
             </tr>
