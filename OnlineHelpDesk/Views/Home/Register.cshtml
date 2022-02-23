@@ -1,0 +1,304 @@
+﻿@model OnlineHelpDesk.Areas.Admin.Models.RegisterUserModel;
+<script src="~/js/Validate.js"></script>
+
+@using Microsoft.AspNetCore.Http;
+@{
+    TempData["Title"] = "Register";
+}
+
+
+
+
+@*<link rel="stylesheet" type="text/css" href="~/login/css/util.css">*@
+<link rel="stylesheet" type="text/css" href="~/login/css/main.css">
+
+
+
+
+<script src="~/js/Validate.js"></script>
+<!--CND VueJs-->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<div id="myApp">
+
+
+
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <div class="login100-pic js-tilt" data-tilt>
+                <img src="~/login/images/img-01.png" alt="IMG">
+            </div>
+
+            <form class="login100-form validate-form" asp-action="Register" onsubmit="return checknull()" asp-controller="Home" method="post">
+                <span class="login100-form-title">
+                    Member Register
+                </span>
+
+                <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+                    <input class="input100" type="text" placeholder="Email" asp-for="Email" id="Email" v-on:keyup="checkvalidate()" v-model.trim="Email">
+                    <span class="focus-input100"></span>
+
+                </div>
+
+
+
+                <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <input class="input100" type="password" asp-for="Password" id="Password" v-on:keyup="checkvalidate()" placeholder="Enter Password" v-model.trim="Password">
+                    <span class="focus-input100"></span>
+
+                </div>
+
+
+                <div class="wrap-input100 validate-input" data-validate="Confirm Password is required">
+                    <input class="input100" type="password" asp-for="ConfirmPassword" id="ConfirmPassword" v-on:keyup="checkvalidate()" placeholder="Enter Confirm Password" v-model.trim="ConfirmPassword">
+                    <span class="focus-input100"></span>
+
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="Phone Number is required">
+                    <input class="input100" type="text" asp-for="PhoneNumber" id="PhoneNumber" v-on:keyup="checkvalidate()" placeholder="Enter Phone Number" v-model.trim="PhoneNumber">
+                    <span class="focus-input100"></span>
+
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="Full Name is required">
+                    <input class="input100" type="text" asp-for="FullName" id="FullName" v-on:keyup="checkvalidate()" placeholder="Enter Full Name" v-model.trim="FullName">
+                    <span class="focus-input100"></span>
+
+                </div>
+
+                <div class="wrap-input100 t">
+
+
+                    <select class="input100" name="Gender" asp-for="Gender">
+                        <option value="True">Male</option>
+                        <option value="False">Fmale</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" type="submit" ref="submit" :disabled="Disable" value="Next">
+                        Register
+                    </button>
+                </div>
+
+
+                <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <label class="text-danger" ref="error"></label>
+                    <span style="text-align: left; color: red; font-style: italic" ref="mail" id="mail"></span>
+                    <span style="text-align: left; color: red; font-style: italic" ref="pass" id="pass"></span>
+                    <span style="text-align: left; color: red; font-style: italic" ref="confirmpass" id="confirmpass"></span>
+                    <span style="text-align: left; color: red; font-style: italic" ref="phone" id="phone"></span>
+                    <span style="text-align: left; color: red; font-style: italic" ref="fname" id="fname"></span>
+
+                </div>
+                <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <label>Do you already have an account ?  <a href="/home/login">Log in</a> </label>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<script>
+
+    var App = new Vue({
+        el: "#myApp",
+        data() {
+            return {
+                Email: "",
+                Password: "",
+                ConfirmPassword: "",
+                PhoneNumber: "",
+                FullName: "",
+                Disable: false
+
+            }
+
+        },
+        methods: {
+
+
+
+            checkvalidate: function () {
+
+
+                if (this.Email != "") {
+                    let mail = this.Email;
+
+                    if (check.test(mail) == false) {
+                        this.$refs.mail.innerText = "Email is not in the correct format"
+                        this.Disable = true;
+
+
+                    } else {
+                        this.$refs.mail.innerText = ""
+
+                        let result = false;
+
+                        let url = "/home/checkemail?mail=" + mail;
+                        var request = new XMLHttpRequest();
+                        request.open('POST', url, false);  // `false` makes the request synchronous
+                        request.send(null);
+
+                        if (request.status === 200) {// That's HTTP for 'ok'
+                            console.log(request.responseText);
+
+                            if (request.responseText == "false") {
+                                this.$refs.mail.innerText = "This e-mail is already taken"
+
+                            } else {
+                                this.$refs.mail.innerText = ""
+                                this.Disable = false;
+                            }
+
+                        }
+
+
+
+                    }
+
+
+
+                }
+
+
+                if (this.Password != "") {
+                    if (checkpass.test(this.Password) == false) {
+                        this.$refs.pass.innerText = "Pass Password must have 8 characters including uppercase, lowercase and special characters"
+
+                        this.Disable = true;
+                    } else {
+                        this.$refs.pass.innerText = ""
+                        this.Disable = false;
+                    }
+                }
+
+
+                if (this.ConfirmPassword != "") {
+                    if (this.Password != this.ConfirmPassword) {
+                        this.$refs.confirmpass.innerText = "Password Incorrect"
+                        this.Disable = true;
+                    } else {
+                        this.$refs.confirmpass.innerText = ""
+                        this.Disable = false;
+                    }
+                }
+
+
+
+                if (this.PhoneNumber != "") {
+                    if (phonecheck.test(this.PhoneNumber) == false && this.PhoneNumber != 10) {
+                        this.$refs.phone.innerText = "Phone number is numeric and has 10 number"
+                        this.Disable = true;
+                    } else {
+                        this.$refs.phone.innerText = ""
+                        this.Disable = false;
+                    }
+                }
+
+                if (this.FullName != "") {
+                    if (namecheck.test(this.FullName) == false) {
+                        this.$refs.fname.innerText = "Name cannot contain special characters"
+                        this.Disable = true;
+                    } else {
+                        this.$refs.fname.innerText = ""
+                        this.Disable = false;
+                    }
+                }
+
+
+
+
+            },
+
+
+        }
+
+    })
+
+</script>
+
+<script>
+
+    function checknull() {
+
+        let checkvalidate = true;
+
+        if (document.getElementById("Email").value.trim() == "") {
+
+            document.getElementById("mail").innerText = "Email is not Null"
+            checkvalidate = false;
+
+
+        } else {
+            document.getElementById("mail").innerText = ""
+        }
+
+        if (document.getElementById("Password").value.trim() == "") {
+
+            document.getElementById("pass").innerText = "Password is not Null"
+
+            checkvalidate = false;
+
+
+        } else {
+            document.getElementById("pass").innerText = ""
+
+
+        }
+
+        if (document.getElementById("ConfirmPassword").value.trim() == "") {
+
+            document.getElementById("confirmpass").innerText = "Confirm Password is not Null"
+            checkvalidate = false;
+
+
+
+        } else {
+            document.getElementById("confirmpass").innerText = ""
+
+        }
+
+        if (document.getElementById("PhoneNumber").value.trim() == "") {
+
+            document.getElementById("phone").innerText = "Confirm Password is not Null"
+            checkvalidate = false;
+
+
+
+        } else {
+            document.getElementById("phone").innerText = ""
+
+        }
+
+        if (document.getElementById("FullName").value.trim() == "") {
+
+            document.getElementById("fname").innerText = "Full name is not Null"
+
+            checkvalidate = false;
+
+
+        } else {
+            document.getElementById("fname").innerText = ""
+
+
+        }
+
+
+        if (checkvalidate == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>

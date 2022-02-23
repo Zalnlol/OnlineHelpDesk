@@ -38,6 +38,79 @@ namespace OnlineHelpDesk.Controllers
           
             return View();
         }
+        public IActionResult Register()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Register(RegisterUserModel registerUserModel)
+        {
+
+            //return BadRequest(registerUserModel);
+
+            ApplicationUser user = new ApplicationUser
+            {
+                UserName = registerUserModel.Email,
+                Email = registerUserModel.Email,
+                PhoneNumber = registerUserModel.PhoneNumber,
+                FullName = registerUserModel.FullName,
+                Class = registerUserModel.Class,
+                Gender = registerUserModel.Gender,
+                Avatar = "image/Userimage/usericon.png"
+            };
+
+            var result = await _userManager.CreateAsync(user, registerUserModel.Password);
+            if (result.Succeeded)
+            {
+
+                IdentityUserRole<string> roleModel = new IdentityUserRole<string>();
+
+                roleModel.UserId = user.Id;
+                roleModel.RoleId = "2";
+                db.UserRoles.Add(roleModel);
+                db.SaveChanges();
+
+                var result1 = await _signInManager.PasswordSignInAsync(user.Email, registerUserModel.Password, true, false);
+
+                if (result1.Succeeded)
+                {
+                    var role = db.UserRoles.SingleOrDefault(t => t.UserId.Equals(user.Id)).RoleId;
+                    HttpContext.Session.SetString("Role", "2");
+                    HttpContext.Session.SetString("userId", user.Id);
+                    return RedirectToAction("Index");
+                }
+
+
+                
+
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public bool checkemail(string mail)
+        {
+
+            mail = mail.Trim().ToLower();
+            var email = db.Users.SingleOrDefault(t => t.Email.ToLower().Equals(mail));
+
+            //var email = db.Users.ToList();
+
+            if (email != null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
+
 
         public IActionResult Login()
         {
