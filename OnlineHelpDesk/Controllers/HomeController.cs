@@ -193,7 +193,8 @@ namespace OnlineHelpDesk.Controllers
 
 
         }
-        [Authorize(Roles = "Receiver,Room Manager")]
+        [Authorize(Roles = "Student,Receiver,Room Manager")]
+
 
         public IActionResult RoomProfile(string id)
         {
