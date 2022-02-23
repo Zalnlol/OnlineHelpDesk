@@ -49,60 +49,39 @@
     <tbody>
         @foreach (var item in Model)
         {
-            if (item.Status != "Unresolved" && item.Status != "Resolved")
-            {
-                <tr>
-                    <td>
-                        @foreach (var _item in ViewBag.facilities)
+            <tr>
+                <td>
+                    @foreach (var _item in ViewBag.facilities)
+                    {
+                        if (item.FacilityId == _item.FacilityId)
                         {
-                            if (item.FacilityId == _item.FacilityId)
-                            {
-                                <p>@_item.FacilityName</p>
-                            }
+                            <p>@_item.FacilityName</p>
                         }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RequestTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        @Html.Raw(item.Remark)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
-                        <a asp-action="Delete" asp-route-id="@item.RequestId">Delete</a>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                <tr>
-                    <td>
-                        @foreach (var _item in ViewBag.facilities)
-                        {
-                            if (item.FacilityId == _item.FacilityId)
-                            {
-                                <p>@_item.FacilityName</p>
-                            }
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RequestTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        @Html.Raw(item.Remark)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
-                        <a asp-action="Delete" asp-route-id="@item.RequestId">Delete</a>
-                    </td>
-                </tr>
-            }
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestTime)
+                </td>
+                <td>
+                    @if (item.Status == "Request" || item.Status == "Report")
+                    {
+                        <p class="text-danger">Waiting for approval</p>
+                    }
+                    else
+                    {
+                        <p class="text-primary">@item.Status</p>
+                    }
+                </td>
+
+                <td>
+                    @Html.Raw(item.Remark)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RequestId">Edit</a> &nbsp;
+                    <a asp-action="Details" asp-route-id="@item.RequestId">Details</a> &nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.RequestId">Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

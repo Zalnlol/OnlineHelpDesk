@@ -47,10 +47,10 @@
                             {
                                 @*@{Context.Session.SetString("userId", UserManager.GetUserAsync(User).Result?.Id)
 
-                                        };*@
+            };*@
 
                                 <li class="nav-item ">
-                                    <a class="nav-link"style="color: white" href="/home/Roomlist">Room List</a>
+                                    <a class="nav-link" style="color: white" href="/home/Roomlist">Room List</a>
                                 </li>
 
                                 @if (Context.Session.GetString("Role") == "4")
@@ -65,7 +65,15 @@
 
                                 {
                                     <li class="nav-item ">
-                                        <a class="nav-link" style="color: white" href="">Report Manager</a>
+                                        <a asp-action="Index" asp-controller="Receiver" class="nav-link" style="color: white">Request Manager</a>
+                                    </li>
+                                }
+
+                                @if (Context.Session.GetString("Role") == "2")
+
+                                {
+                                    <li class="nav-item ">
+                                        <a asp-action="Index" asp-controller="Request" class="nav-link" style="color: white" >Request List</a>
                                     </li>
                                 }
 
@@ -76,13 +84,13 @@
                                     </a>
 
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item"  href="/home/UserProfile">Manager Profile</a>
-                                        <a class="dropdown-item"  href="#">History Report</a>
+                                        <a class="dropdown-item" href="/home/UserProfile">Manager Profile</a>
+                                        <a class="dropdown-item" href="#">History Report</a>
 
                                     </div>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link"  style="color:white" href="/home/logout">Logout</a>
+                                    <a class="nav-link" style="color:white" href="/home/logout">Logout</a>
                                 </li>
                             }
 

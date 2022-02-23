@@ -34,5 +34,7 @@ namespace OnlineHelpDesk.Models
         public DateTime EndDate { get; set; }
 
         public String Remark { get; set; }
+
+        public bool Authorize { get; set; }
     }
 }
