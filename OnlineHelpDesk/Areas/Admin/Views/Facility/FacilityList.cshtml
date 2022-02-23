@@ -11,7 +11,7 @@
 </p>
 
 <div style="margin: 14px">
-    <form asp-action="FacilityList">
+    <form asp-action="FacilityList" method="get" >
         <select name="data" onchange="Search()">
             @if (ViewBag.data == "")
             {
@@ -64,9 +64,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FacilityCategory)
-            </th>
+           
             <th>Action</th>
         </tr>
     </thead>
@@ -78,17 +76,36 @@
                 @Html.DisplayFor(modelItem => item.FacilityName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FacilityCategoryId)
+
+                @foreach (var item11 in ViewBag.facategory)
+                {
+                    if (item.FacilityCategoryId.Equals(item11.FacilityCategoryId) ==true)
+                    {
+                <span>@item11.CategoryName</span>
+                    }
+                }
+
+
+        
             </td>
             <td>
                 <img src="~/@Url.Content(item.Image)" width="120" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @if (item.Status == 0)
+                {
+
+
+
+                    <span class="text-danger">Not Active</span>
+                }
+                else
+                {
+                    <span class="text-success">Active</span>
+
+                }
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FacilityCategory.FacilityCategoryId)
-            </td>
+         
             <td>
                 <a asp-action="Edit" asp-route-id="@item.FacilityId">Edit</a> |
                 @*<a asp-action="Details" asp-route-id="@item.FacilityId">Details</a> |*@

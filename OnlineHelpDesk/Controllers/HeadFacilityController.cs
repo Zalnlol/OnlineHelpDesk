@@ -35,8 +35,22 @@ namespace OnlineHelpDesk.Controllers
                 return RedirectToAction("Login");
             }
 
-            var id = _userManager.GetUserAsync(User).Result?.FacilityId;
-            var facilityManaged = db.Facility.SingleOrDefault(t => t.FacilityId == id);
+            string iduser = _userManager.GetUserAsync(User).Result?.Id;
+            var facid = 0;
+
+            string roleid = db.UserRoles.SingleOrDefault(t => t.UserId.Equals(iduser)).RoleId;
+
+            if (roleid == "3")
+            {
+                facid = 1;
+            }
+            else
+            {
+                var tmp = _userManager.GetUserAsync(User).Result?.FacilityId;
+                facid = (int)tmp;
+            }
+
+            var facilityManaged = db.Facility.SingleOrDefault(t => t.FacilityId == facid);
             return View(facilityManaged);
         }
 

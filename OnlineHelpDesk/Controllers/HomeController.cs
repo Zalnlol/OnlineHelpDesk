@@ -14,7 +14,7 @@ using OnlineHelpDesk.Areas.Admin.Models;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace OnlineHelpDesk.Controllers
 {
@@ -226,6 +226,8 @@ namespace OnlineHelpDesk.Controllers
 
         }
 
+
+     
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
 
@@ -245,7 +247,180 @@ namespace OnlineHelpDesk.Controllers
             }
         }
 
-        [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
+        [Authorize(Roles = "Receiver,Room Manager")]
+        public async Task<IActionResult> samplelist()
+        {
+            string iduser = _userManager.GetUserAsync(User).Result?.Id;
+            var facid = 0;
+
+            string roleid = db.UserRoles.SingleOrDefault(t => t.UserId.Equals(iduser)).RoleId;
+
+            if (roleid== "3")
+            {
+                facid = 1;
+            }
+            else
+            {
+                var tmp = _userManager.GetUserAsync(User).Result?.FacilityId;
+                facid = (int)tmp;
+            }
+
+            var facategoryid = db.Facility.SingleOrDefault(t => t.FacilityId == facid).FacilityCategoryId;
+
+            var ds = db.RequestSample.Where(t => t.FacilityCategoryId.Equals(facategoryid)).ToList();
+
+            ViewBag.data = (from fc in ds
+                            join abc in db.FacilityCategory
+                            on fc.FacilityCategoryId
+                            equals abc.FacilityCategoryId
+                            select new RequestSampleMix()
+                            {
+                                RequestSampleId = fc.RequestSampleId,
+                                FacilityCategoryId = fc.FacilityCategoryId,
+                                Content = fc.Content,
+                                CategoryName = abc.CategoryName
+                            }).ToList();
+
+
+          
+
+
+            return View();
+       
+
+
+        }
+
+        [Authorize(Roles = "Receiver,Room Manager")]
+        public IActionResult Create()
+        {
+            string iduser = _userManager.GetUserAsync(User).Result?.Id;
+            var facid = 0;
+
+            string roleid = db.UserRoles.SingleOrDefault(t => t.UserId.Equals(iduser)).RoleId;
+
+            if (roleid == "3")
+            {
+                facid = 1;
+            }
+            else
+            {
+                var tmp = _userManager.GetUserAsync(User).Result?.FacilityId;
+                facid = (int)tmp;
+            }
+
+            var facategoryid = db.Facility.SingleOrDefault(t => t.FacilityId == facid).FacilityCategoryId;
+            
+            ViewBag.facategoryid = facategoryid;
+            return View();
+        }
+       
+        
+        [Authorize(Roles = "Receiver,Room Manager")]
+        [HttpPost]
+        public IActionResult Create(RequestSample requestSample)
+        {
+ 
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.RequestSample.Add(requestSample);
+                    db.SaveChanges();
+                    return RedirectToAction("samplelist");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Fail");
+                }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
+            }
+            return View();
+        }
+        
+        
+        
+        [Authorize(Roles = "Receiver,Room Manager")]
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+
+            string iduser = _userManager.GetUserAsync(User).Result?.Id;
+            var facid = 0;
+
+            string roleid = db.UserRoles.SingleOrDefault(t => t.UserId.Equals(iduser)).RoleId;
+
+            if (roleid == "3")
+            {
+                facid = 1;
+            }
+            else
+            {
+                var tmp = _userManager.GetUserAsync(User).Result?.FacilityId;
+                facid = (int)tmp;
+            }
+
+            var facategoryid = db.Facility.SingleOrDefault(t => t.FacilityId == facid).FacilityCategoryId;
+
+            ViewBag.facategoryid = facategoryid;
+
+
+            var model = db.RequestSample.Find(id);
+            return View(model);
+        }
+
+        [Authorize(Roles = "Receiver,Room Manager")]
+        [HttpPost]
+        public IActionResult Edit(RequestSample updateRequestSample)
+        {
+            ViewBag.data = new SelectList(db.FacilityCategory.ToList(), "FacilityCategoryId");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var ex = db.RequestSample.Find(updateRequestSample.RequestSampleId);
+                    ex.FacilityCategoryId = updateRequestSample.FacilityCategoryId;
+                    ex.Content = updateRequestSample.Content;
+                    db.SaveChanges();
+                    return RedirectToAction("samplelist");
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
+            }
+            return View();
+        }
+
+       
+        [Authorize(Roles = "Receiver,Room Manager")]
+        public IActionResult Delete(int id)
+        {
+            var model = db.RequestSample.Find(id);
+            return View(model);
+        }
+
+        [Authorize(Roles = "Receiver,Room Manager")]
+        [HttpPost]
+        public IActionResult Delete(RequestSample removeRequestSample)
+        {
+            var model = db.RequestSample.SingleOrDefault(rs => rs.RequestSampleId.Equals(removeRequestSample.RequestSampleId));
+            db.RequestSample.Remove(model);
+            db.SaveChanges();
+            return RedirectToAction("samplelist");
+        }
+
+    
+
+
+    [Authorize(Roles = "Receiver,Room Manager,Student,Admin")]
 
         public IActionResult UserProfile(string ? id)
         {

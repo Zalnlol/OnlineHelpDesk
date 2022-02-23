@@ -1,0 +1,51 @@
+﻿
+@model IEnumerable<OnlineHelpDesk.Areas.Admin.Models.RequestSample>
+
+@{
+    ViewData["Title"] = "RequestSampleList";
+
+    var data = ViewBag.data;
+}
+
+
+<h1>RequestSampleList</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityCategoryId)
+            </th>
+            <th>
+                Facility Category
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in data)
+        {
+            <tr>
+                <td>
+                    @item.FacilityCategoryId
+                </td>
+                <td>
+                    @item.CategoryName
+                </td>
+                <td>
+                    @item.Content
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RequestSampleId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RequestSampleId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

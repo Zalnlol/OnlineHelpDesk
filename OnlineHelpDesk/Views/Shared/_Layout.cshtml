@@ -67,13 +67,16 @@
                                     <li class="nav-item ">
                                         <a asp-action="Index" asp-controller="Receiver" class="nav-link" style="color: white">Request Manager</a>
                                     </li>
+                                    <li class="nav-item ">
+                                        <a class="nav-link" style="color: white" href="/HeadFacility/RoomManager">Room Manager</a>
+                                    </li>
                                 }
 
                                 @if (Context.Session.GetString("Role") == "2")
 
                                 {
                                     <li class="nav-item ">
-                                        <a asp-action="Index" asp-controller="Request" class="nav-link" style="color: white" >Request List</a>
+                                        <a asp-action="Index" asp-controller="Request" class="nav-link" style="color: white">Request List</a>
                                     </li>
                                 }
 
